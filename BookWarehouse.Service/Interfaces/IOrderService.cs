@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Enums;
 
 namespace BookWarehouse.Service.Interfaces
 {
@@ -10,9 +11,13 @@ namespace BookWarehouse.Service.Interfaces
 
         List<OrderDTO> GetByNameLibrarian(string name);
 
-        List<OrderDTO> GetByStatus(bool status);
+        List<OrderDTO> GetByStatus(StatusAble status);
 
         OrderDTO GetById(int id);
+
+        OrderDTO GetListBookProgressOfMember(int id);
+
+        List<StatisticsDTO> GetStatistics(DateTime dateStart, DateTime dateEnd);
 
         OrderAddDTO Add(OrderAddDTO orderDTO);
 

@@ -36,6 +36,11 @@ namespace BookWarehouse.Service.Implementation
             return _bookRepository.FindAll().ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
+        public BookDTO GetBorrowedBook()
+        {
+            return _bookRepository.GetBorrowedBook().ProjectTo<BookDTO>(_mapper.ConfigurationProvider).FirstOrDefault();
+        }
+
         public BookDTO GetBySeri(string keyword)
         {
             var datas = _bookRepository.GetBySeri(keyword);

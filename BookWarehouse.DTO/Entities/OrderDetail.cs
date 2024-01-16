@@ -6,11 +6,20 @@ namespace BookWarehouse.DTO.Entities
     {
         public OrderDetail() { }
 
+        public OrderDetail(int orderId,int bookId, DateTime dateCreated, DateTime dateGiveCurrent, DateTime dateGiveExpect) 
+        {
+            this.OrderId = orderId;
+            BookId = bookId;
+            DateCreated = dateCreated;
+            DateGiveCurrent = dateGiveCurrent;
+            DateGiveExpect = dateGiveExpect;
+        }
+
         public OrderDetail(DateTime dateGiveCurrent) 
         {
             DateGiveCurrent = dateGiveCurrent;
         }
-
+        public DateTime DateCreated { get; set; }
         public DateTime DateGiveExpect { get; set; }
         public DateTime DateGiveCurrent { get; set; }
 

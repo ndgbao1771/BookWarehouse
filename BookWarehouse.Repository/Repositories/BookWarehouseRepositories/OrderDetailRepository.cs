@@ -1,24 +1,22 @@
 ﻿using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.Enums;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
 {
-    public class MemberRepository : Repository<Member, int>, IMemberRepository
+    public class OrderDetailRepository : Repository<OrderDetail, int>, IOrderDetailRepository
     {
         private readonly AppDbContext _context;
 
-        public MemberRepository(AppDbContext context) : base(context)
+        public OrderDetailRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public IQueryable<Member> GetByName(string name)
+        public IQueryable<OrderDetail> GetBooksBorrowedInMonth(DateTime DateStart, DateTime DateEnd)
         {
-            var datas = _context.Members.Where(x => x.Name.Contains(name));
+            var datas = _context.OrderDetails.Where(x => x.DateCreated >= DateStart && x.DateCreated <= DateEnd);
             return datas;
         }
     }

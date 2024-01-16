@@ -25,6 +25,14 @@ namespace BookWarehouse.Service.AutoMappers
             CreateMap<Order, OrderDTO>().ForMember(dest => dest.MemberName, otp => otp.MapFrom(x => x.member.Name))
                                         .ForMember(dest => dest.LibrarianName, otp => otp.MapFrom(x => x.librarian.Name))
                                         .ForMember(dest => dest.orderDetails, otp => otp.MapFrom(x => x.orderDetails));
+
+            CreateMap<Order, StatisticsDTO>().ForMember(dest => dest.BorrowerName, otp => otp.MapFrom(x => x.member.Name))
+                                             .ForMember(dest => dest.LibrarianName, otp => otp.MapFrom(x => x.librarian.Name))
+                                             .ForMember(dest => dest.Status, otp => otp.MapFrom(x => x.Status))
+                                             .ForMember(dest => dest.BookName, otp => otp.MapFrom(x => x.orderDetails.Select(x => x.book.Name).FirstOrDefault()))
+                                             .ForMember(dest => dest.ExpectedReturnDate, otp => otp.MapFrom(x => x.orderDetails.Select(x => x.DateGiveExpect).FirstOrDefault()))
+                                             .ForMember(dest => dest.ActualReturnDate, otp => otp.MapFrom(x => x.orderDetails.Select(x => x.DateGiveCurrent).FirstOrDefault()));
+
             CreateMap<OrderDetail, OrderDetailDTO>();
 
             CreateMap<Librarian, LibrarianDTO>();

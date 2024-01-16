@@ -6,6 +6,8 @@ namespace BookWarehouse.Service.Interfaces
     {
         List<BookDTO> GetAll();
 
+        BookDTO GetBorrowedBook();
+
         BookDTO GetBySeri(string keyword);
 
         BookUpdateDTO Add(BookUpdateDTO bookUpdateDTO);

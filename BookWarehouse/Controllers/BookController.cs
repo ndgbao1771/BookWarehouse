@@ -29,6 +29,13 @@ namespace BookWarehouse.Controllers
             return new OkObjectResult(datas);
         }
 
+        [HttpGet]
+        public IActionResult GetBorrowedBook() 
+        {
+            var datas = _bookService.GetBorrowedBook();
+            return new OkObjectResult(datas);
+        }
+
         [HttpPost]
         public IActionResult AddEntity(BookUpdateDTO entity)
         {

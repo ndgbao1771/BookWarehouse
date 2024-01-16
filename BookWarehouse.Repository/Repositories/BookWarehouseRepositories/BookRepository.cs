@@ -20,5 +20,17 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
             Book datas = _context.Books.FirstOrDefault(x => x.Id == bookDetail.BookId);
             return datas;
         }
+
+
+        public IQueryable<Book> GetBorrowedBook()
+        {
+            var datas = _context.Orders.SelectMany(x => x.orderDetails.Select(x => x.book))
+                                       .GroupBy(book => book.Id)
+                                       .OrderByDescending(x => x.Count())
+                                       .Select(x => x.Key);
+            var result = _context.Books.Where(x => datas.Contains(x.Id));
+            return result;
+        }
+
     }
 }

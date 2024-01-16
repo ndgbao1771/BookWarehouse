@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Enums;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,8 @@ namespace BookWarehouse.Controllers
         [HttpGet]
         public IActionResult GetById(int id) 
         {
-            return new OkObjectResult(_orderService.GetById(id));
+            var datas = _orderService.GetById(id);
+            return new OkObjectResult(datas);
         }
 
         [HttpGet]
@@ -40,9 +42,21 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByStatus(bool status)
+        public IActionResult GetByStatus(StatusAble status)
         {
             return new OkObjectResult(_orderService.GetByStatus(status));
+        }
+
+        [HttpGet]
+        public IActionResult GetListBookProgressOfMember(int id)
+        {
+            return new OkObjectResult(_orderService.GetListBookProgressOfMember(id));
+        }
+
+        [HttpGet]
+        public IActionResult GetStatistics(DateTime dateStart, DateTime dateEnd)
+        {
+            return new OkObjectResult(_orderService.GetStatistics(dateStart, dateEnd));
         }
 
         [HttpPost]

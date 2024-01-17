@@ -35,17 +35,16 @@ namespace BookWarehouse.Service.AutoMappers
                 .ConstructUsing(c => new Member(c.Name, c.CreatedAt, c.CreatedBy, c.UpdatedAt, c.UpdatedBy));
 
             CreateMap<OrderAddDTO, Order>()
-                .ConstructUsing(c => new Order(c.MemberId, c.LibrarianId, c.Status))
+                .ConstructUsing(c => new Order(c.MemberId, c.LibrarianId, c.DateCreated, c.Status))
                 .ForMember(dest => dest.orderDetails, otp => otp.MapFrom(x => new List<OrderDetail> 
                                                                                { 
                                                                                    new OrderDetail 
                                                                                    { 
                                                                                        OrderId = x.Id,
                                                                                        BookId = x.BookId,
-                                                                                       DateCreated = x.DateCreated,
                                                                                        DateGiveExpect = x.DateGiveExpect,
                                                                                        DateGiveCurrent = x.DateGiveCurent
-                                                                                   } 
+                                                                                   }
                                                                                 }));
             CreateMap<OrderUpdateDTO, Order>()
                 .ConstructUsing(x => new Order(x.Status))

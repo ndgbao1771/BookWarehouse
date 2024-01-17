@@ -1,5 +1,6 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
 using BookWarehouse.DTO.Enums;
+using BookWarehouse.DTO.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,12 @@ namespace BookWarehouse.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+        }
+
+        [HttpGet]
+        public IActionResult GetByFilter([FromQuery]OrderFilter filter)
+        {
+            return new OkObjectResult(_orderService.GetByFilter(filter));
         }
 
         [HttpGet]
@@ -60,7 +67,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEntity(OrderAddDTO orderDTO)
+        public IActionResult CreatedBookLoanReceipt(OrderAddDTO orderDTO)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +78,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateEntity(OrderUpdateDTO orderDTO)
+        public IActionResult BookReturnReceipt(OrderUpdateDTO orderDTO)
         {
             if (ModelState.IsValid)
             {

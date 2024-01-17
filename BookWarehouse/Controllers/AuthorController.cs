@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +34,13 @@ namespace BookWarehouse.Controllers
         public IActionResult GetById(int id)
         {
             var datas = _authorService.GetById(id);
+            return new OkObjectResult(datas);
+        }
+
+        [HttpGet]
+        public IActionResult GetByFilter([FromQuery] AuthorFilter filter)
+        {
+            var datas = _authorService.GetByFilter(filter);
             return new OkObjectResult(datas);
         }
 

@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Filters;
 
 namespace BookWarehouse.Service.Interfaces
 {
@@ -7,6 +8,8 @@ namespace BookWarehouse.Service.Interfaces
         List<MemberDTO> GetAll();
 
         List<MemberDTO> GetByName(string name);
+
+        List<MemberDTO> GetByFilter(MemberFilter filter);
 
         MemberDTO GetById(int id);
 

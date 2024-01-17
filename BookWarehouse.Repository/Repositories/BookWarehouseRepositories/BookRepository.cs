@@ -32,5 +32,10 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
             return result;
         }
 
+        public IQueryable<Book> GetQueryable()
+        {
+            return _context.Books.AsQueryable();
+        }
+
     }
 }

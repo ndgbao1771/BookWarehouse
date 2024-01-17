@@ -61,14 +61,26 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
                                        .Include(x => x.orderDetails).ThenInclude(x => x.book);
             return datas;
         }
+
+        public IQueryable<Order> GetQueryable()
+        {
+            var query = _context.Orders.AsQueryable();
+            return query;
+        }
+
         public IQueryable<Order> GetStatistics(DateTime dateStart, DateTime dateEnd)
         {
-            var datas = _context.Orders.Where(x => x.orderDetails.Any(x => x.DateCreated >= dateStart && x.DateCreated <= dateEnd))
+            var datas = _context.Orders.Where(x => x.DateCreated >= dateStart && x.DateCreated <= dateEnd)
                                        .Include(x => x.librarian)
                                        .Include(x => x.member)
                                        .Include(x => x.orderDetails).ThenInclude(x => x.book);
             return datas;
         }
 
+        public IQueryable<Order> GetBooksBorrowedInMonth(DateTime DateStart, DateTime DateEnd)
+        {
+            var datas = _context.Orders.Where(x => x.DateCreated >= DateStart && x.DateCreated <= DateEnd);
+            return datas;
+        }
     }
 }

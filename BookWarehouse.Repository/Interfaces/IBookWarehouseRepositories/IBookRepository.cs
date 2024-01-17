@@ -7,5 +7,6 @@ namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
     {
         Book GetBySeri(string keyword);
         IQueryable<Book> GetBorrowedBook();
+        IQueryable<Book> GetQueryable();
     }
 }

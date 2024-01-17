@@ -3,11 +3,13 @@ using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.DTO.EntityDTOs;
 using BookWarehouse.DTO.Enums;
+using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.Csv;
 using BookWarehouse.Service.Interfaces;
 using CsvHelper;
 using System.Globalization;
+using System.Linq;
 
 namespace BookWarehouse.Service.Implementation
 {
@@ -100,6 +102,16 @@ namespace BookWarehouse.Service.Implementation
         {
             _orderRepository.Updated(_mapper.Map<OrderUpdateDTO, Order>(orderDTO));
             _orderRepository.Commit();
+        }
+
+        public List<OrderDTO> GetByFilter(OrderFilter filter)
+        {
+            var datas = _orderRepository.GetQueryable();
+            datas = datas.Where(x => filter.Id == null || x.Id == filter.Id)
+                         .Where(y => string.IsNullOrEmpty(filter.MemberName) || y.member.Name.Contains(filter.MemberName))
+                         .Where(z => string.IsNullOrEmpty(filter.LibrarianName) || z.librarian.Name.Contains(filter.LibrarianName))
+                         .Where(o => filter.CreatedDate == null || o.DateCreated == filter.CreatedDate);
+            return datas.ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
         }
     }
 }

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.Interfaces;
 
@@ -34,6 +35,14 @@ namespace BookWarehouse.Service.Implementation
         public List<LibrarianDTO> GetAll()
         {
             return _librarianRepository.FindAll().ProjectTo<LibrarianDTO>(_mapper.ConfigurationProvider).ToList();
+        }
+
+        public List<LibrarianDTO> GetByFilter(LibrarianFilter filter)
+        {
+            var query = _librarianRepository.GetQueryable();
+            query = query.Where(x => filter.Id == null || x.Id == filter.Id)
+                         .Where(x => string.IsNullOrEmpty(filter.Name) || x.Name == filter.Name);
+            return query.ProjectTo<LibrarianDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
         public LibrarianDTO GetById(int id)

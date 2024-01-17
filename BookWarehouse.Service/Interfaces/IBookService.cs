@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Filters;
 
 namespace BookWarehouse.Service.Interfaces
 {
@@ -9,6 +10,8 @@ namespace BookWarehouse.Service.Interfaces
         BookDTO GetBorrowedBook();
 
         BookDTO GetBySeri(string keyword);
+
+        List<BookDTO> GetByFilter(BookFilter filter);
 
         BookUpdateDTO Add(BookUpdateDTO bookUpdateDTO);
 

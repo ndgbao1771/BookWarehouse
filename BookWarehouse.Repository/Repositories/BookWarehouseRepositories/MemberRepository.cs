@@ -1,9 +1,7 @@
 ﻿using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.Enums;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
 {
@@ -20,6 +18,12 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         {
             var datas = _context.Members.Where(x => x.Name.Contains(name));
             return datas;
+        }
+
+        public IQueryable<Member> GetQueryable()
+        {
+            var query = _context.Members.AsQueryable();
+            return query;
         }
     }
 }

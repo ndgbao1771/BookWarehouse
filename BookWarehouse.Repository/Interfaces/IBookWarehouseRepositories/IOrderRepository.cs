@@ -17,5 +17,8 @@ namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
         IQueryable<Order> GetListBookProgressOfMember(int id);
 
         IQueryable<Order> GetStatistics(DateTime dateStart, DateTime dateEnd);
+        IQueryable<Order> GetBooksBorrowedInMonth(DateTime DateStart, DateTime DateEnd);
+
+        IQueryable<Order> GetQueryable();
     }
 }

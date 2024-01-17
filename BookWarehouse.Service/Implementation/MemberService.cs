@@ -2,13 +2,9 @@
 using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BookWarehouse.Service.Implementation
 {
@@ -39,6 +35,14 @@ namespace BookWarehouse.Service.Implementation
         public List<MemberDTO> GetAll()
         {
             return _memberRepository.FindAll().ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).ToList();
+        }
+
+        public List<MemberDTO> GetByFilter(MemberFilter filter)
+        {
+            var query = _memberRepository.GetQueryable();
+            query = query.Where(x => filter.Id == null || x.Id == filter.Id)
+                         .Where(x => string.IsNullOrEmpty(filter.Name) || x.Name == filter.Name);
+            return query.ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
         public MemberDTO GetById(int id)

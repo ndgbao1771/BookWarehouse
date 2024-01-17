@@ -10,7 +10,6 @@ namespace BookWarehouse.DTO.Entities
         {
             this.OrderId = orderId;
             BookId = bookId;
-            DateCreated = dateCreated;
             DateGiveCurrent = dateGiveCurrent;
             DateGiveExpect = dateGiveExpect;
         }
@@ -19,7 +18,6 @@ namespace BookWarehouse.DTO.Entities
         {
             DateGiveCurrent = dateGiveCurrent;
         }
-        public DateTime DateCreated { get; set; }
         public DateTime DateGiveExpect { get; set; }
         public DateTime DateGiveCurrent { get; set; }
 

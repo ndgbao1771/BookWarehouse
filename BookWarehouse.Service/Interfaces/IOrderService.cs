@@ -1,5 +1,6 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
 using BookWarehouse.DTO.Enums;
+using BookWarehouse.DTO.Filters;
 
 namespace BookWarehouse.Service.Interfaces
 {
@@ -12,6 +13,8 @@ namespace BookWarehouse.Service.Interfaces
         List<OrderDTO> GetByNameLibrarian(string name);
 
         List<OrderDTO> GetByStatus(StatusAble status);
+
+        List<OrderDTO> GetByFilter(OrderFilter filter);
 
         OrderDTO GetById(int id);
 

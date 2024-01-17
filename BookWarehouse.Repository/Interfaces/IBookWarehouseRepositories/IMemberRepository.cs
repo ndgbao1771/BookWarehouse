@@ -6,5 +6,7 @@ namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
     public interface IMemberRepository : IRepository<Member, int>
     {
         IQueryable<Member> GetByName(string name);
+
+        IQueryable<Member> GetQueryable();
     }
 }

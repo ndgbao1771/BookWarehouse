@@ -13,11 +13,5 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         {
             _context = context;
         }
-
-        public IQueryable<OrderDetail> GetBooksBorrowedInMonth(DateTime DateStart, DateTime DateEnd)
-        {
-            var datas = _context.OrderDetails.Where(x => x.DateCreated >= DateStart && x.DateCreated <= DateEnd);
-            return datas;
-        }
     }
 }

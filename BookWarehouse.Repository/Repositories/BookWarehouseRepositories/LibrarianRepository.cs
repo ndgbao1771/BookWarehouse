@@ -19,5 +19,11 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
             var datas = _context.Librarians.Where(x => x.Name == name);
             return datas;
         }
+
+        public IQueryable<Librarian> GetQueryable()
+        {
+            return _context.Librarians.AsQueryable();
+             
+        }
     }
 }

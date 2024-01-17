@@ -6,7 +6,6 @@ namespace BookWarehouse.DTO.EntityDTOs
     {
         public int Id { get; set; }
         public int OrderId { get; set; }
-        public DateTime DateCreated { get; set; }
         public DateTime DateGiveExpect { get; set; }
         public DateTime DateGiveCurrent { get; set; }
         public int BookId { get; set; }

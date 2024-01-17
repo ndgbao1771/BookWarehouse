@@ -1,4 +1,6 @@
 ﻿using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Filters;
+using BookWarehouse.Service.Implementation;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +15,12 @@ namespace BookWarehouse.Controllers
         public MemberController(IMemberService memberService)
         {
             _memberService = memberService;
+        }
+
+        [HttpGet]
+        public IActionResult GetByFilter([FromQuery] MemberFilter filter)
+        {
+            return new OkObjectResult(_memberService.GetByFilter(filter));
         }
 
         [HttpGet]

@@ -19,5 +19,10 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
             var datas = _context.Authors.Where(x => x.Name.Contains(name));
             return datas;
         }
+
+        public IQueryable<Author> GetQueryable()
+        {
+            return _context.Authors.AsQueryable();
+        }
     }
 }

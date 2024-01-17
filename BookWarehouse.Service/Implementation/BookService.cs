@@ -2,8 +2,13 @@
 using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
+using BookWarehouse.Repository.QueryExtension;
 using BookWarehouse.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace BookWarehouse.Service.Implementation
 {
@@ -53,6 +58,17 @@ namespace BookWarehouse.Service.Implementation
             var datas = _mapper.Map<BookUpdateDTO, Book>(bookUpdateDTO);
             _bookRepository.Updated(datas);
             _bookRepository.Commit();
+        }
+
+        public List<BookDTO> GetByFilter(BookFilter filter)
+        {
+            var query = _bookRepository.GetQueryable();
+            query = query.Include(bd => bd.bookDetails)
+                         .Where(x => string.IsNullOrEmpty(filter.Seri) || x.bookDetails.Select(x => x.Seri).ToList().Contains(filter.Seri))
+                         .Where(x => filter.Id == null || x.Id == filter.Id)
+                         .Where(BookQueryExtension.NameBookFilter(filter))
+                         .Where(BookQueryExtension.NameAuthorFilter(filter));
+            return query.ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
         }
     }
 }

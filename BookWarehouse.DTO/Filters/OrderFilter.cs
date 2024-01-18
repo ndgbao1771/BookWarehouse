@@ -1,4 +1,6 @@
-﻿namespace BookWarehouse.DTO.Filters
+﻿using BookWarehouse.DTO.Enums;
+
+namespace BookWarehouse.DTO.Filters
 {
     public class OrderFilter
     {
@@ -6,5 +8,7 @@
         public string? LibrarianName { get; set; }
         public string? MemberName { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public StatusAble? StatusAble { get; set; }
+        public DateTime? DateGiveCurrent { get; set; }
     }
 }

@@ -71,8 +71,16 @@ namespace BookWarehouse.Controllers
         {
             if (ModelState.IsValid)
             {
-                _orderService.Add(orderDTO);
-                return Ok("Add success");
+                if(orderDTO.BookId != 0)
+                {
+                    _orderService.Add(orderDTO);
+                    return Ok("Add success");
+                }
+                else
+                {
+                    return BadRequest("Book loan receipt can't be created because there are no books to borrow");
+                }
+                
             }
             return BadRequest("Add Failed");
         }

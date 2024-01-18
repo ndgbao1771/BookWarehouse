@@ -47,14 +47,9 @@ namespace BookWarehouse.Service.AutoMappers
                                                                                    }
                                                                                 }));
             CreateMap<OrderUpdateDTO, Order>()
-                .ConstructUsing(x => new Order(x.Status))
-                .ForMember(dest => dest.orderDetails, otp => otp.MapFrom(x => new List<OrderDetail>
-                                                                               {
-                                                                                   new OrderDetail
-                                                                                   {
-                                                                                       DateGiveCurrent = x.DateGiveCurent
-                                                                                   }
-                                                                                }));
+                .ForMember(x => x.LibrarianId, opt => opt.Ignore())
+                .ForMember(x => x.MemberId, opt => opt.Ignore())
+                .ConstructUsing(x => new Order(x.Status));
 
             CreateMap<LibrarianDTO, Librarian>()
                .ConstructUsing(c => new Librarian(c.Name, c.CreatedAt, c.CreatedBy, c.UpdatedAt, c.UpdatedBy));

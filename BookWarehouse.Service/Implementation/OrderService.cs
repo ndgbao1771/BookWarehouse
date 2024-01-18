@@ -100,8 +100,14 @@ namespace BookWarehouse.Service.Implementation
 
         public void Update(OrderUpdateDTO orderDTO)
         {
-            _orderRepository.Updated(_mapper.Map<OrderUpdateDTO, Order>(orderDTO));
-            _orderRepository.Commit();
+            var exist = _orderRepository.FindById(orderDTO.Id, x => x.orderDetails);
+            if(exist != null)
+            {
+                exist.Status = orderDTO.Status;
+                exist.orderDetails.ForEach(x => x.DateGiveCurrent = orderDTO.DateGiveCurent);
+                _orderRepository.Updated(exist);
+                _orderRepository.Commit();
+            }
         }
 
         public List<OrderDTO> GetByFilter(OrderFilter filter)
@@ -110,7 +116,7 @@ namespace BookWarehouse.Service.Implementation
             datas = datas.Where(x => filter.Id == null || x.Id == filter.Id)
                          .Where(y => string.IsNullOrEmpty(filter.MemberName) || y.member.Name.Contains(filter.MemberName))
                          .Where(z => string.IsNullOrEmpty(filter.LibrarianName) || z.librarian.Name.Contains(filter.LibrarianName))
-                         .Where(o => filter.CreatedDate == null || o.DateCreated == filter.CreatedDate);
+                         .Where(o => filter.CreatedDate == null || o.DateCreated.Date == filter.CreatedDate.Value.Date);
             return datas.ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
         }
     }

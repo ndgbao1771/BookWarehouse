@@ -7,6 +7,7 @@ using BookWarehouse.Service.Implementation;
 using BookWarehouse.Service.Interfaces;
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 var connection = builder.Configuration.GetConnectionString("connection");
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connection, o => o.MigrationsAssembly("BookWarehouse.DTO")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection, o => o.MigrationsAssembly("BookWarehouse.DTO")));
 
 builder.Services.AddControllers();
 

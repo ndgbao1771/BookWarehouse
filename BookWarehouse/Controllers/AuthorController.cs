@@ -2,6 +2,8 @@
 using BookWarehouse.DTO.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookWarehouse.Controllers
 {
@@ -47,13 +49,22 @@ namespace BookWarehouse.Controllers
         [HttpPost]
         public IActionResult AddEntity(AuthorDTO authorDTO) 
         {
-            if (ModelState.IsValid)
+            if(authorDTO != null)
             {
-                var datas = _authorService.Add(authorDTO);
-                return new OkObjectResult(datas);
+                if (ModelState.IsValid)
+                {
+                    var datas = _authorService.Add(authorDTO);
+                    return new OkObjectResult(datas);
+                }
             }
-            return BadRequest(authorDTO);
+            else
+            {
+                return BadRequest("Model is null");
+            }
+            
+            return BadRequest();
         }
+
 
         [HttpPut]
         public IActionResult UpdateEntity(AuthorDTO authorDTO)
@@ -63,6 +74,7 @@ namespace BookWarehouse.Controllers
                 _authorService.Update(authorDTO);
                 return Ok("Update success");
             }
+            
             return BadRequest(authorDTO);
         }
 

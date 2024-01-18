@@ -18,7 +18,7 @@ namespace BookWarehouse.DTO.EntityDTOs
         public int Id { get; set; }
         public int MemberId { get; set; }
         public int LibrarianId { get; set; }
-        public int BookId {  get; set; }
+        public int BookId { get; set; }
         public StatusAble Status { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateGiveCurent { get; set; }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.Service.EntityDTOs;
 
 namespace BookWarehouse.Service.AutoMappers
 {
@@ -13,13 +13,13 @@ namespace BookWarehouse.Service.AutoMappers
 
             CreateMap<BookUpdateDTO, Book>()
                 .ConstructUsing(c => new Book(c.Name, c.CreatedAt, c.CreatedBy, c.UpdatedAt, c.UpdatedBy, c.AuthorId, c.BookCategoryId))
-                .ForMember(dest => dest.bookDetails, opt => opt.MapFrom(src => new List<BookDetail> 
-                                                                                { 
-                                                                                    new BookDetail 
-                                                                                    { 
-                                                                                        Seri = src.Seri, 
-                                                                                        BookId = src.Id 
-                                                                                    } 
+                .ForMember(dest => dest.bookDetails, opt => opt.MapFrom(src => new List<BookDetail>
+                                                                                {
+                                                                                    new BookDetail
+                                                                                    {
+                                                                                        Seri = src.Seri,
+                                                                                        BookId = src.Id
+                                                                                    }
                                                                                  }));
 
             CreateMap<AuthorDTO, Author>()
@@ -36,10 +36,10 @@ namespace BookWarehouse.Service.AutoMappers
 
             CreateMap<OrderAddDTO, Order>()
                 .ConstructUsing(c => new Order(c.MemberId, c.LibrarianId, c.DateCreated, c.Status))
-                .ForMember(dest => dest.orderDetails, otp => otp.MapFrom(x => new List<OrderDetail> 
-                                                                               { 
-                                                                                   new OrderDetail 
-                                                                                   { 
+                .ForMember(dest => dest.orderDetails, otp => otp.MapFrom(x => new List<OrderDetail>
+                                                                               {
+                                                                                   new OrderDetail
+                                                                                   {
                                                                                        OrderId = x.Id,
                                                                                        BookId = x.BookId,
                                                                                        DateGiveExpect = x.DateGiveExpect,

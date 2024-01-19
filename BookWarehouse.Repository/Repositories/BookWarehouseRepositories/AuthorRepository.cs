@@ -2,6 +2,7 @@
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
 {
@@ -12,6 +13,13 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         public AuthorRepository(AppDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public IQueryable<Author> GetAllView()
+        {
+            var query = "Select * from AuthorViewAll";
+            var datas = _context.Authors.FromSqlRaw(query);
+            return datas;
         }
 
         public IQueryable<Author> GetByName(string name)

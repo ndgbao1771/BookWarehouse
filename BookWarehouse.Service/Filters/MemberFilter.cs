@@ -1,6 +1,6 @@
-﻿namespace BookWarehouse.DTO.Filters
+﻿namespace BookWarehouse.Service.Filters
 {
-    public class AuthorFilter
+    public class MemberFilter
     {
         public int? Id { get; set; }
         public string? Name { get; set; }

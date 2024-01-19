@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
+using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 
 namespace BookWarehouse.Service.Implementation

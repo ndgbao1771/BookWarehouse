@@ -1,4 +1,4 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
+﻿using BookWarehouse.Service.EntityDTOs;
 
 namespace BookWarehouse.Service.Interfaces
 {

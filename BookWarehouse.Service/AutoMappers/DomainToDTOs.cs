@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.Service.EntityDTOs;
 
 namespace BookWarehouse.Service.AutoMappers
 {
@@ -8,7 +8,7 @@ namespace BookWarehouse.Service.AutoMappers
     {
         public DomainToDTOs()
         {
-            CreateMap<Book, BookDTO>().ForMember(dest => dest.Seri, opt => opt.MapFrom(src => src.bookDetails != null 
+            CreateMap<Book, BookDTO>().ForMember(dest => dest.Seri, opt => opt.MapFrom(src => src.bookDetails != null
                                                                      && src.bookDetails.Any() ? src.bookDetails.First().Seri : null))
                                       .ForMember(dest => dest.Author, opt => opt.MapFrom(x => x.author.Name))
                                       .ForMember(dest => dest.BookCategory, opt => opt.MapFrom(x => x.bookCategory.Name));

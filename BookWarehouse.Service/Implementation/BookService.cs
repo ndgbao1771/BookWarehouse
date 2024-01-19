@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
-using BookWarehouse.Repository.QueryExtension;
+using BookWarehouse.Service.QueryExtension;
+using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Linq.Expressions;
+using BookWarehouse.DTO;
+using System.Xml.Schema;
 
 namespace BookWarehouse.Service.Implementation
 {
@@ -16,8 +16,9 @@ namespace BookWarehouse.Service.Implementation
     {
         private readonly IBookRepository _bookRepository;
         private readonly IMapper _mapper;
+        private readonly AppDbContext _context;
 
-        public BookService(IBookRepository bookRepository, IMapper mapper)
+        public BookService(IBookRepository bookRepository, IMapper mapper, AppDbContext context)
         {
             _bookRepository = bookRepository;
             _mapper = mapper;
@@ -25,15 +26,26 @@ namespace BookWarehouse.Service.Implementation
 
         public BookUpdateDTO Add(BookUpdateDTO bookUpdateDTO)
         {
-            var datas = _mapper.Map<BookUpdateDTO, Book>(bookUpdateDTO);
-            _bookRepository.Add(datas);
-            _bookRepository.Commit();
-            return bookUpdateDTO;
+            var AuthorCheckReference = _context.Authors.Where(x => x.Id == bookUpdateDTO.AuthorId).FirstOrDefault();
+            var BookCategoryCheckReference = _context.BookCategories.Where(x => x.Id == bookUpdateDTO.BookCategoryId).FirstOrDefault();
+            if(AuthorCheckReference == null || bookUpdateDTO == null)
+            {
+                return bookUpdateDTO;
+            }
+            else
+            {
+                var datas = _mapper.Map<BookUpdateDTO, Book>(bookUpdateDTO);
+                _bookRepository.Add(datas);
+                _bookRepository.Commit();
+                return bookUpdateDTO;
+            }
+            
         }
 
         public void Delete(int id)
         {
             _bookRepository.Remove(id);
+            _bookRepository.Commit();
         }
 
         public List<BookDTO> GetAll()
@@ -55,9 +67,18 @@ namespace BookWarehouse.Service.Implementation
 
         public void Update(BookUpdateDTO bookUpdateDTO)
         {
-            var datas = _mapper.Map<BookUpdateDTO, Book>(bookUpdateDTO);
-            _bookRepository.Updated(datas);
-            _bookRepository.Commit();
+            var AuthorCheckReference = _context.Authors.Where(x => x.Id == bookUpdateDTO.AuthorId).FirstOrDefault();
+            var BookCategoryCheckReference = _context.BookCategories.Where(x => x.Id == bookUpdateDTO.BookCategoryId).FirstOrDefault();
+            if (AuthorCheckReference == null || bookUpdateDTO == null)
+            {
+                return;
+            }
+            else
+            {
+                var datas = _mapper.Map<BookUpdateDTO, Book>(bookUpdateDTO);
+                _bookRepository.Updated(datas);
+                _bookRepository.Commit();
+            }
         }
 
         public List<BookDTO> GetByFilter(BookFilter filter)
@@ -66,8 +87,8 @@ namespace BookWarehouse.Service.Implementation
             query = query.Include(bd => bd.bookDetails)
                          .Where(x => string.IsNullOrEmpty(filter.Seri) || x.bookDetails.Select(x => x.Seri).ToList().Contains(filter.Seri))
                          .Where(x => filter.Id == null || x.Id == filter.Id)
-                         .Where(BookQueryExtension.NameBookFilter(filter))
-                         .Where(BookQueryExtension.NameAuthorFilter(filter));
+                         .Where(BookQueryExtension.BookNameFilter(filter))
+                         .Where(BookQueryExtension.AuthorNameFilter(filter));
             return query.ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
         }
     }

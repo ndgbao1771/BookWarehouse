@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
+using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 
 namespace BookWarehouse.Service.Implementation
@@ -35,6 +35,11 @@ namespace BookWarehouse.Service.Implementation
         public List<AuthorDTO> GetAll()
         {
             return _authorRepository.FindAll().ProjectTo<AuthorDTO>(_mapper.ConfigurationProvider).ToList();
+        }
+
+        public List<AuthorDTO> GetAllView()
+        {
+            return _authorRepository.GetAllView().ProjectTo<AuthorDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
         public List<AuthorDTO> GetByFilter(AuthorFilter filter)

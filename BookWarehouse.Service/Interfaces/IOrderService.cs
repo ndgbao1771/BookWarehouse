@@ -1,6 +1,6 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Enums;
-using BookWarehouse.DTO.Filters;
+﻿using BookWarehouse.DTO.Enums;
+using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 
 namespace BookWarehouse.Service.Interfaces
 {

@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.EntityDTOs;
 using BookWarehouse.DTO.Enums;
-using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.Csv;
+using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using CsvHelper;
 using System.Globalization;
-using System.Linq;
 
 namespace BookWarehouse.Service.Implementation
 {
@@ -17,18 +17,30 @@ namespace BookWarehouse.Service.Implementation
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
+        private readonly AppDbContext _context;
 
-        public OrderService(IOrderRepository orderRepository, IMapper mapper)
+        public OrderService(IOrderRepository orderRepository, IMapper mapper, AppDbContext context)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         public OrderAddDTO Add(OrderAddDTO orderDTO)
         {
-            _orderRepository.Add(_mapper.Map<OrderAddDTO, Order>(orderDTO));
-            _orderRepository.Commit();
-            return orderDTO;
+            var MemberCheckReference = _context.Members.Where(x => x.Id == orderDTO.MemberId).FirstOrDefault();
+            var LibrarianCheckReference = _context.Librarians.Where(x => x.Id == orderDTO.LibrarianId).FirstOrDefault();
+            var BookCheckReference = _context.Books.Where(x => x.Id == orderDTO.BookId).FirstOrDefault();
+            if (MemberCheckReference == null || LibrarianCheckReference == null || BookCheckReference == null)
+            {
+                return orderDTO;
+            }
+            else
+            {
+                _orderRepository.Add(_mapper.Map<OrderAddDTO, Order>(orderDTO));
+                _orderRepository.Commit();
+                return orderDTO;
+            }
         }
 
         public void Delete(int id)
@@ -73,6 +85,7 @@ namespace BookWarehouse.Service.Implementation
             WriteCsvFile(datas);
             return datas;
         }
+
         public void WriteCsvFile(List<StatisticsDTO> filtered)
         {
             if (filtered == null || !filtered.Any())
@@ -101,7 +114,7 @@ namespace BookWarehouse.Service.Implementation
         public void Update(OrderUpdateDTO orderDTO)
         {
             var exist = _orderRepository.FindById(orderDTO.Id, x => x.orderDetails);
-            if(exist != null)
+            if (exist != null)
             {
                 exist.Status = orderDTO.Status;
                 exist.orderDetails.ForEach(x => x.DateGiveCurrent = orderDTO.DateGiveCurent);

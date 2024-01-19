@@ -1,9 +1,7 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Filters;
+﻿using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookWarehouse.Controllers
 {
@@ -22,6 +20,10 @@ namespace BookWarehouse.Controllers
         public IActionResult GetAll()
         {
             var datas = _authorService.GetAll();
+            if (datas == null)
+            {
+                return NotFound(); //Error 404
+            }
             return new OkObjectResult(datas);
         }
 
@@ -29,14 +31,32 @@ namespace BookWarehouse.Controllers
         public IActionResult GetByName(string name)
         {
             var datas = _authorService.GetByName(name);
+            if (datas == null)
+            {
+                return NotFound(); //Error 404
+            }
             return new OkObjectResult(datas);
         }
 
         [HttpGet]
         public IActionResult GetById(int id)
         {
-            var datas = _authorService.GetById(id);
-            return new OkObjectResult(datas);
+            if (id == 0)
+            {
+                return NotFound(new { message = "Can't find Author by id equal zero!" });
+            }
+            else
+            {
+                var datas = _authorService.GetById(id);
+                if (datas == null)
+                {
+                    return NotFound(); //Error 404
+                }
+                else
+                {
+                    return new OkObjectResult(datas);
+                }
+            }
         }
 
         [HttpGet]
@@ -47,24 +67,15 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEntity(AuthorDTO authorDTO) 
+        public IActionResult AddEntity(AuthorDTO authorDTO)
         {
-            if(authorDTO != null)
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    var datas = _authorService.Add(authorDTO);
-                    return new OkObjectResult(datas);
-                }
+                var datas = _authorService.Add(authorDTO);
+                return new OkObjectResult(datas);
             }
-            else
-            {
-                return BadRequest("Model is null");
-            }
-            
             return BadRequest();
         }
-
 
         [HttpPut]
         public IActionResult UpdateEntity(AuthorDTO authorDTO)
@@ -72,17 +83,23 @@ namespace BookWarehouse.Controllers
             if (ModelState.IsValid)
             {
                 _authorService.Update(authorDTO);
-                return Ok("Update success");
+                return Ok(authorDTO);
             }
-            
-            return BadRequest(authorDTO);
+            return BadRequest("Update failed");
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            _authorService.Delete(id);
-            return Ok("Delete success!");
+            if (id == 0)
+            {
+                return BadRequest("Can't delete by id equal zero !");
+            }
+            else
+            {
+                _authorService.Delete(id);
+                return Ok("Delete success!");
+            }
         }
     }
 }

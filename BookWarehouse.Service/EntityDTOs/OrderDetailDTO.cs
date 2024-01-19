@@ -1,6 +1,6 @@
 ﻿using BookWarehouse.DTO.Enums;
 
-namespace BookWarehouse.DTO.EntityDTOs
+namespace BookWarehouse.Service.EntityDTOs
 {
     public class OrderDetailDTO
     {

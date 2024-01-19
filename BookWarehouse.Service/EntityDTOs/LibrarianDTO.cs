@@ -1,7 +1,9 @@
-﻿namespace BookWarehouse.DTO.EntityDTOs
-{ 
-    public class BookCategoryDTO
+﻿namespace BookWarehouse.Service.EntityDTOs
+{
+    public class LibrarianDTO
     {
+        public LibrarianDTO() { }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -1,6 +1,6 @@
 ﻿using BookWarehouse.DTO.Enums;
 
-namespace BookWarehouse.DTO.Filters
+namespace BookWarehouse.Service.Filters
 {
     public class OrderFilter
     {

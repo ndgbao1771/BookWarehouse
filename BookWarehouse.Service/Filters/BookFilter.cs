@@ -1,4 +1,4 @@
-﻿namespace BookWarehouse.DTO.Filters
+﻿namespace BookWarehouse.Service.Filters
 {
     public class BookFilter
     {

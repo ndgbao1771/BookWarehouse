@@ -1,4 +1,4 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
+﻿using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,35 +26,71 @@ namespace BookWarehouse.Controllers
         public IActionResult GetAll()
         {
             var datas = _bookCategoryService.GetAll();
-            return new OkObjectResult(datas);
+            if(datas == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return new OkObjectResult(datas);
+            }
         }
 
         [HttpGet]
         public IActionResult GetById(int id)
         {
-            var datas = _bookCategoryService.GetById(id);
-            return new OkObjectResult(datas);
+            if(id == 0)
+            {
+                return BadRequest("Can't not find book category by id equal zero!");
+            }
+            else
+            {
+                var datas = _bookCategoryService.GetById(id);
+                return new OkObjectResult(datas);
+            }
         }
 
         [HttpPost]
         public IActionResult AddEntity(BookCategoryDTO bookCategoryDTO)
         {
-            _bookCategoryService.Add(bookCategoryDTO);
-            return new OkObjectResult(bookCategoryDTO);
+            if(bookCategoryDTO == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    _bookCategoryService.Add(bookCategoryDTO);
+                    return new OkObjectResult(bookCategoryDTO);
+                }
+                return BadRequest("Create book category failed");
+            }
         }
 
         [HttpPut]
         public IActionResult UpdateEntity(BookCategoryDTO bookCategoryDTO)
         {
-            _bookCategoryService.Update(bookCategoryDTO);
-            return new OkObjectResult(bookCategoryDTO);
+            if (ModelState.IsValid)
+            {
+                _bookCategoryService.Update(bookCategoryDTO);
+                return new OkObjectResult(bookCategoryDTO);
+            }
+            return BadRequest("Update book category failed");
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            _bookCategoryService.Delete(id);
-            return new OkObjectResult(id);
+            if(id == 0)
+            {
+                return BadRequest("Can't not delete book category by id equal zero!");
+            }
+            else
+            {
+                _bookCategoryService.Delete(id);
+                return new OkObjectResult(id);
+            }
         }
     }
 }

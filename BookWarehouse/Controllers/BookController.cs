@@ -1,5 +1,5 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Filters;
+﻿using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +24,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByFilter(BookFilter filter)
+        public IActionResult GetByFilter([FromQuery] BookFilter filter)
         {
             var datas = _bookService.GetByFilter(filter);
             return new OkObjectResult(datas);
@@ -34,50 +34,92 @@ namespace BookWarehouse.Controllers
         public IActionResult GetAll()
         {
             var datas = _bookService.GetAll();
-            return new OkObjectResult(datas);
+            if (datas == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return new OkObjectResult(datas);
+            }
         }
 
         [HttpGet]
         public IActionResult GetBySeri(string keyword)
         {
-            var datas = _bookService.GetBySeri(keyword);
-            return new OkObjectResult(datas);
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return NotFound(new { message = "Please fill in accurately and completely Seri! " });
+            }
+            else
+            {
+                var datas = _bookService.GetBySeri(keyword);
+                return new OkObjectResult(datas);
+            }
         }
 
         [HttpGet]
-        public IActionResult GetBorrowedBook() 
+        public IActionResult GetBorrowedBook()
         {
             var datas = _bookService.GetBorrowedBook();
-            return new OkObjectResult(datas);
+            if (datas == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return new OkObjectResult(datas);
+            }
         }
 
         [HttpPost]
         public IActionResult AddEntity(BookUpdateDTO entity)
         {
-            if (ModelState.IsValid)
+            if (entity == null)
             {
-                var datas = _bookService.Add(entity);
-                return new OkObjectResult(datas);
+                return BadRequest("Please fill in accurately and completely information book");
             }
-            return BadRequest(ModelState);
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    var datas = _bookService.Add(entity);
+                    return new OkObjectResult(datas);
+                }
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpPut]
         public IActionResult UpdateEntity(BookUpdateDTO bookUpdateDTO)
         {
-            if (ModelState.IsValid)
+            if (bookUpdateDTO == null)
             {
-                _bookService.Update(bookUpdateDTO);
-                return Ok(bookUpdateDTO);
+                return BadRequest("Please fill in accurately and completely information book");
             }
-            return BadRequest(ModelState);
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    _bookService.Update(bookUpdateDTO);
+                    return Ok(bookUpdateDTO);
+                }
+                return BadRequest(ModelState);
+            }
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            _bookService.Delete(id);
-            return Ok(id);
+            if(id == 0)
+            {
+                return BadRequest("Can't not delete by id equal zero!");
+            }
+            else
+            {
+                _bookService.Delete(id);
+                return Ok(id);
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Filters;
+﻿using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,23 +25,45 @@ namespace BookWarehouse.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return new OkObjectResult(_librarianService.GetAll());
+            var datas = _librarianService.GetAll();
+            if(datas == null)
+            {
+                return BadRequest("No data to show!");
+            }
+            else
+            {
+                return new OkObjectResult(datas);
+            }
         }
 
         [HttpGet]
         public IActionResult GetById(int id)
         {
-            return new OkObjectResult(_librarianService.GetById(id));
+            if(id == 0)
+            {
+                return NotFound("Can't find librarian by id equal zero!");
+            }
+            else
+            {
+                return new OkObjectResult(_librarianService.GetById(id));
+            }
         }
 
         [HttpGet]
         public IActionResult GetByName(string name)
         {
-            return new OkObjectResult(_librarianService.GetByName(name));
+            if (string.IsNullOrEmpty(name))
+            {
+                return BadRequest("Please fill in accurately and completely librarian name!");
+            }
+            else
+            {
+                return new OkObjectResult(_librarianService.GetByName(name));
+            }
         }
 
         [HttpGet]
-        public IActionResult GetByFilter([FromQuery]LibrarianFilter filter)
+        public IActionResult GetByFilter([FromQuery] LibrarianFilter filter)
         {
             return new OkObjectResult(_librarianService.GetByFilter(filter));
         }
@@ -71,8 +93,15 @@ namespace BookWarehouse.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            _librarianService.Delete(id);
-            return Ok("Delete success");
+            if(id == 0)
+            {
+                return NotFound("Can't delete by id equal zero!");
+            }
+            else
+            {
+                _librarianService.Delete(id);
+                return Ok("Delete success");
+            }
         }
     }
 }

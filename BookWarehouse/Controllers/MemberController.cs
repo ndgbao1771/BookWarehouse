@@ -1,6 +1,5 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Filters;
-using BookWarehouse.Service.Implementation;
+﻿using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,21 +29,43 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll() 
+        public IActionResult GetAll()
         {
-            return new OkObjectResult(_memberService.GetAll());
+            var datas = _memberService.GetAll();
+            if (datas == null)
+            {
+                return NotFound("No data to show");
+            }
+            else
+            {
+                return new OkObjectResult(datas);
+            }
         }
 
         [HttpGet]
-        public IActionResult GetById(int id) 
+        public IActionResult GetById(int id)
         {
-            return new OkObjectResult(_memberService.GetById(id));
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return new OkObjectResult(_memberService.GetById(id));
+            }
         }
 
         [HttpGet]
         public IActionResult GetByName(string name)
         {
-            return new OkObjectResult(_memberService.GetByName(name));
+            if (string.IsNullOrEmpty(name))
+            {
+                return NotFound();
+            }
+            else
+            {
+                return new OkObjectResult(_memberService.GetByName(name));
+            }
         }
 
         [HttpPost]
@@ -72,8 +93,15 @@ namespace BookWarehouse.Controllers
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            _memberService.Delete(id);
-            return new OkObjectResult("Delete success");
+            if (id == 0)
+            {
+                return BadRequest("Can't delete member by id equal zero!");
+            }
+            else
+            {
+                _memberService.Delete(id);
+                return new OkObjectResult("Delete success");
+            }
         }
     }
 }

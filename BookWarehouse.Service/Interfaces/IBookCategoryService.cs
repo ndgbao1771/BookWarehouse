@@ -1,5 +1,4 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.EntityViewSQL;
+﻿using BookWarehouse.Service.EntityDTOs;
 
 namespace BookWarehouse.Service.Interfaces
 {

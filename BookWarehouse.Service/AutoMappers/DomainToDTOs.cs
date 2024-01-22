@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.EntityDTOs;
 using BookWarehouse.DTO.EntityViewSQL;
+using BookWarehouse.Service.EntityDTOs;
+
 
 namespace BookWarehouse.Service.AutoMappers
 {

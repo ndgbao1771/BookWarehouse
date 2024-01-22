@@ -1,6 +1,6 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-using BookWarehouse.DTO.Enums;
-using BookWarehouse.DTO.Filters;
+﻿using BookWarehouse.DTO.Enums;
+using BookWarehouse.Service.EntityDTOs;
+using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,7 +36,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetById(int id) 
+        public IActionResult GetById(int id)
         {
             var datas = _orderService.GetById(id);
             return new OkObjectResult(datas);
@@ -77,7 +77,7 @@ namespace BookWarehouse.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(orderDTO.BookId != 0)
+                if (orderDTO.BookId != 0)
                 {
                     _orderService.Add(orderDTO);
                     return Ok("Add success");
@@ -86,7 +86,6 @@ namespace BookWarehouse.Controllers
                 {
                     return BadRequest("Book loan receipt can't be created because there are no books to borrow");
                 }
-                
             }
             return BadRequest("Add Failed");
         }

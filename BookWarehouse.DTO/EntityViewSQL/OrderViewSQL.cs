@@ -1,6 +1,4 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
-
-namespace BookWarehouse.DTO.EntityViewSQL
+﻿namespace BookWarehouse.DTO.EntityViewSQL
 {
     public class OrderViewSQL
     {

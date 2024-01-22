@@ -51,7 +51,6 @@ namespace BookWarehouse.DTO
         public DbSet<Member> Members { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-
         #endregion DbSet<> Entity
 
         #region DbSet<> Entity ViewSQL

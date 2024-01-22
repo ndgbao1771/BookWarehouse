@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.DTO.Enums;
 using BookWarehouse.Repository.Interfaces.Shared;
 
@@ -20,5 +21,7 @@ namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
         IQueryable<Order> GetBooksBorrowedInMonth(DateTime DateStart, DateTime DateEnd);
 
         IQueryable<Order> GetQueryable();
+
+        IQueryable<OrderViewSQL> GetAllByViewSql();
     }
 }

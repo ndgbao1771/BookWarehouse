@@ -1,6 +1,7 @@
 ﻿using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.DTO.EntityDTOs;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.DTO.Enums;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
@@ -81,6 +82,11 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         {
             var datas = _context.Orders.Where(x => x.DateCreated >= DateStart && x.DateCreated <= DateEnd);
             return datas;
+        }
+
+        public IQueryable<OrderViewSQL> GetAllByViewSql()
+        {
+            return _context.orderViewSQLs;
         }
     }
 }

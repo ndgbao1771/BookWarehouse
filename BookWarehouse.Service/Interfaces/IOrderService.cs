@@ -6,6 +6,7 @@ namespace BookWarehouse.Service.Interfaces
 {
     public interface IOrderService
     {
+        List<OrderDTO> GetAllByViewSql();
         List<OrderDTO> GetAll();
 
         List<OrderDTO> GetByNameMember(string name);

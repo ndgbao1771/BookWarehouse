@@ -5,6 +5,7 @@ using BookWarehouse.DTO.EntityDTOs;
 using BookWarehouse.DTO.Filters;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookWarehouse.Service.Implementation
 {
@@ -35,6 +36,11 @@ namespace BookWarehouse.Service.Implementation
         public List<AuthorDTO> GetAll()
         {
             return _authorRepository.FindAll().ProjectTo<AuthorDTO>(_mapper.ConfigurationProvider).ToList();
+        }
+
+        public List<AuthorDTO> GetAllByViewSQL()
+        {
+            return _authorRepository.GetAllByViewSQL().ProjectTo<AuthorDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
         public List<AuthorDTO> GetByFilter(AuthorFilter filter)

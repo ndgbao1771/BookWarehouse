@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.Repository.Interfaces.Shared;
 
 namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
@@ -8,5 +9,6 @@ namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
         Book GetBySeri(string keyword);
         IQueryable<Book> GetBorrowedBook();
         IQueryable<Book> GetQueryable();
+        IQueryable<BookViewSQL> GetAllByViewSql();
     }
 }

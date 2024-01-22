@@ -1,5 +1,6 @@
 ﻿using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
 
@@ -12,6 +13,11 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         public LibrarianRepository(AppDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public IQueryable<LibratianViewSQL> GetAllByViewSql()
+        {
+            return _context.libratianViewSQLs;
         }
 
         public IQueryable<Librarian> GetByName(string name)

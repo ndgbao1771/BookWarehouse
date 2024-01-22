@@ -1,9 +1,8 @@
-﻿using BookWarehouse.DTO.EntityDTOs;
+﻿using BookWarehouse.DTO;
+using BookWarehouse.DTO.EntityDTOs;
 using BookWarehouse.DTO.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookWarehouse.Controllers
 {
@@ -12,10 +11,19 @@ namespace BookWarehouse.Controllers
     public class AuthorController : Controller
     {
         private readonly IAuthorService _authorService;
+        private readonly AppDbContext _context;
 
-        public AuthorController(IAuthorService authorService)
+        public AuthorController(IAuthorService authorService, AppDbContext context)
         {
             _authorService = authorService;
+            _context = context;
+        }
+
+        [HttpGet]
+        public IActionResult GetAllByViewSQL()
+        {
+            var datas = _authorService.GetAllByViewSQL();
+            return new OkObjectResult(datas);
         }
 
         [HttpGet]
@@ -47,9 +55,9 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddEntity(AuthorDTO authorDTO) 
+        public IActionResult AddEntity(AuthorDTO authorDTO)
         {
-            if(authorDTO != null)
+            if (authorDTO != null)
             {
                 if (ModelState.IsValid)
                 {
@@ -61,10 +69,9 @@ namespace BookWarehouse.Controllers
             {
                 return BadRequest("Model is null");
             }
-            
+
             return BadRequest();
         }
-
 
         [HttpPut]
         public IActionResult UpdateEntity(AuthorDTO authorDTO)
@@ -74,7 +81,7 @@ namespace BookWarehouse.Controllers
                 _authorService.Update(authorDTO);
                 return Ok("Update success");
             }
-            
+
             return BadRequest(authorDTO);
         }
 

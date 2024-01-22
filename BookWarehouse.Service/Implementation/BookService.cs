@@ -70,5 +70,11 @@ namespace BookWarehouse.Service.Implementation
                          .Where(BookQueryExtension.NameAuthorFilter(filter));
             return query.ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
         }
+
+        public List<BookDTO> GetAllByViewSql()
+        {
+            var datas = _bookRepository.GetAllByViewSql().ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
+            return datas;
+        }
     }
 }

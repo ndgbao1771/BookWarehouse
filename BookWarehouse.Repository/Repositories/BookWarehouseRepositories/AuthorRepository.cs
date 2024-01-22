@@ -1,5 +1,6 @@
 ﻿using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
 
@@ -12,6 +13,12 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         public AuthorRepository(AppDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public IQueryable<AuthorViewSQL> GetAllByViewSQL()
+        {
+            var datas = _context.authorViewSQLs;
+            return datas;
         }
 
         public IQueryable<Author> GetByName(string name)

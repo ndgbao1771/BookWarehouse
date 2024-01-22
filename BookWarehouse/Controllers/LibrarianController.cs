@@ -17,6 +17,12 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetAllByViewSql()
+        {
+            return new OkObjectResult(_librarianService.GetAllByViewSql());
+        }
+
+        [HttpGet]
         public IActionResult GetAll()
         {
             return new OkObjectResult(_librarianService.GetAll());

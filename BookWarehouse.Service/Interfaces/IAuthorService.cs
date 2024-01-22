@@ -5,6 +5,7 @@ namespace BookWarehouse.Service.Interfaces
 {
     public interface IAuthorService
     {
+        List<AuthorDTO> GetAllByViewSQL();
         List<AuthorDTO> GetAll();
 
         AuthorDTO GetById(int id);

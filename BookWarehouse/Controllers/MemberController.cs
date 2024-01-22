@@ -18,6 +18,12 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetAllByViewSql()
+        {
+            return new OkObjectResult(_memberService.GetAllByViewSql());
+        }
+
+        [HttpGet]
         public IActionResult GetByFilter([FromQuery] MemberFilter filter)
         {
             return new OkObjectResult(_memberService.GetByFilter(filter));

@@ -1,5 +1,7 @@
 ﻿using BookWarehouse.DTO.Configuration;
+using BookWarehouse.DTO.Configurations.ViewSQL;
 using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWarehouse.DTO
@@ -12,7 +14,8 @@ namespace BookWarehouse.DTO
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            #region Entity
+
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             modelBuilder.ApplyConfiguration(new BookCategoryConfiguration());
@@ -21,7 +24,24 @@ namespace BookWarehouse.DTO
             modelBuilder.ApplyConfiguration(new MemberConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new OrderDetailConfiguration());
+
+            #endregion Entity
+
+            #region Entity ViewSQL
+
+            modelBuilder.ApplyConfiguration(new AuthorViewSQLConfiguration());
+            modelBuilder.ApplyConfiguration(new BookViewSQLConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryViewSQLCOnfiguration());
+            modelBuilder.ApplyConfiguration(new LibratianViewSQLConfiguration());
+            modelBuilder.ApplyConfiguration(new MemberViewSQLConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderViewSQLConfiguration());
+
+            #endregion Entity ViewSQL
+
+            base.OnModelCreating(modelBuilder);
         }
+
+        #region DbSet<> Entity
 
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -31,5 +51,18 @@ namespace BookWarehouse.DTO
         public DbSet<Member> Members { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+
+        #endregion DbSet<> Entity
+
+        #region DbSet<> Entity ViewSQL
+
+        public DbSet<AuthorViewSQL> authorViewSQLs { get; set; }
+        public DbSet<BookViewSQL> bookViewSQLs { get; set; }
+        public DbSet<CategoryViewSQL> categoryViewSQLs { get; set; }
+        public DbSet<LibratianViewSQL> libratianViewSQLs { get; set; }
+        public DbSet<MemberViewSQL> memberViewSQLs { get; set; }
+        public DbSet<OrderViewSQL> orderViewSQLs { get; set; }
+
+        #endregion DbSet<> Entity ViewSQL
     }
 }

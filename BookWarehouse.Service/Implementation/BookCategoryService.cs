@@ -4,6 +4,7 @@ using BookWarehouse.DTO.Entities;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Interfaces;
+using System.Linq;
 
 namespace BookWarehouse.Service.Implementation
 {
@@ -35,6 +36,12 @@ namespace BookWarehouse.Service.Implementation
         public List<BookCategoryDTO> GetAll()
         {
             var datas = _bookCategoryRepository.FindAll().ProjectTo<BookCategoryDTO>(_mapper.ConfigurationProvider).ToList();
+            return datas;
+        }
+
+        public List<BookCategoryDTO> GetAllByViewSQL()
+        {
+            var datas = _bookCategoryRepository.GetAllByViewSQL().ProjectTo<BookCategoryDTO>(_mapper.ConfigurationProvider).ToList();
             return datas;
         }
 

@@ -1,4 +1,5 @@
 ﻿using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.Repository.Interfaces.Shared;
 
 namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
@@ -8,5 +9,7 @@ namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
         IQueryable<Librarian> GetByName(string name);
 
         IQueryable<Librarian> GetQueryable();
+
+        IQueryable<LibratianViewSQL> GetAllByViewSql();
     }
 }

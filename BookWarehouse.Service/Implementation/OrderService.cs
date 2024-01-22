@@ -132,5 +132,10 @@ namespace BookWarehouse.Service.Implementation
                          .Where(o => filter.CreatedDate == null || o.DateCreated.Date == filter.CreatedDate.Value.Date);
             return datas.ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
         }
+
+        public List<OrderDTO> GetAllByViewSql()
+        {
+            return _orderRepository.GetAllByViewSql().ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
+        }
     }
 }

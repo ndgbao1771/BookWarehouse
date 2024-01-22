@@ -5,6 +5,7 @@ namespace BookWarehouse.Service.Interfaces
 {
     public interface IBookService
     {
+        List<BookDTO> GetAllByViewSql();
         List<BookDTO> GetAll();
 
         BookDTO GetBorrowedBook();

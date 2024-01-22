@@ -1,5 +1,6 @@
 ﻿using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
 
@@ -37,5 +38,9 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
             return _context.Books.AsQueryable();
         }
 
+        public IQueryable<BookViewSQL> GetAllByViewSql()
+        {
+            return _context.bookViewSQLs;
+        }
     }
 }

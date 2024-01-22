@@ -37,6 +37,11 @@ namespace BookWarehouse.Service.Implementation
             return _memberRepository.FindAll().ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
+        public List<MemberDTO> GetAllByViewSql()
+        {
+            return _memberRepository.GetAllByViewSql().ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).ToList();
+        }
+
         public List<MemberDTO> GetByFilter(MemberFilter filter)
         {
             var query = _memberRepository.GetQueryable();

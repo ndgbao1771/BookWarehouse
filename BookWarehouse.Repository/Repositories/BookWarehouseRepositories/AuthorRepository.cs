@@ -1,5 +1,6 @@
 ﻿using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
+using BookWarehouse.DTO.EntityViewSQL;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,15 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
             _context = context;
         }
 
+        public IQueryable<AuthorViewSQL> GetAllByViewSQL()
+        {
+            var datas = _context.authorViewSQLs;
+            return datas;
+        }
+
         public IQueryable<Author> GetAllView()
         {
-            var query = "Select * from AuthorViewAll";
-            var datas = _context.Authors.FromSqlRaw(query);
-            return datas;
+            throw new NotImplementedException();
         }
 
         public IQueryable<Author> GetByName(string name)

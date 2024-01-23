@@ -8,6 +8,7 @@ using BookWarehouse.Service.Interfaces;
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 var connection = builder.Configuration.GetConnectionString("connection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection, o => o.MigrationsAssembly("BookWarehouse.DTO")));
+
+//Add support to logging with SERILOG
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+
+builder.Services.AddLogging(lg => 
+    {
+        lg.AddConsole();
+    }
+);
 
 builder.Services.AddControllers();
 
@@ -49,6 +60,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles();
+//Add support to logging request with SERILOG
+app.UseSerilogRequestLogging();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -56,3 +71,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

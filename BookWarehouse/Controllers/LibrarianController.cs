@@ -10,16 +10,27 @@ namespace BookWarehouse.Controllers
     public class LibrarianController : Controller
     {
         private readonly ILibrarianService _librarianService;
-
-        public LibrarianController(ILibrarianService librarianService)
+        private readonly ILogger<LibrarianController> _logger;
+        public LibrarianController(ILibrarianService librarianService, ILogger<LibrarianController> logger)
         {
             _librarianService = librarianService;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAllByViewSql()
         {
-            return new OkObjectResult(_librarianService.GetAllByViewSql());
+            try
+            {
+                var datas = _librarianService.GetAllByViewSql();
+                _logger.LogInformation("Get Success");
+                return View(datas);
+            }catch (Exception ex)
+            {
+                _logger.LogError("Get failed !");
+                return new StatusCodeResult(500);
+            }
+            
         }
 
         [HttpGet]

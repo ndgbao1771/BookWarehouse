@@ -11,16 +11,27 @@ namespace BookWarehouse.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly ILogger _logger;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, ILogger logger)
         {
             _orderService = orderService;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAllByViewSql()
         {
-            return new OkObjectResult(_orderService.GetAllByViewSql());
+            try
+            {
+                var datas = _orderService.GetAllByViewSql();
+                _logger.LogInformation("Get success !");
+                return new OkObjectResult(datas);
+            }catch(Exception ex)
+            {
+                _logger.LogError("Get failed !");
+                return new StatusCodeResult(500);
+            }
         }
 
         [HttpGet]

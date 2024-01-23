@@ -52,12 +52,12 @@ namespace BookWarehouse.Service.AutoMappers
                                         .ForMember(dest => dest.LibrarianName, otp => otp.MapFrom(x => x.librarian.Name))
                                         .ForMember(dest => dest.orderDetails, otp => otp.MapFrom(x => x.orderDetails));
             CreateMap<OrderViewSQL, OrderDTO>().ForMember(dest => dest.LibrarianName, otp => otp.MapFrom(x => x.LibratianName))
-                                               .ForMember(dest => dest.MemberName, otp => otp.MapFrom(x => x.MemberName))
-                                               .ForMember(dest => dest.BookName, opt => opt.MapFrom(src => src.BookName))
-                                               .ForMember(dest => dest.DateCreated, otp => otp.MapFrom(x => x.DateCreated))
+                                               /*.ForMember(dest => dest.MemberName, otp => otp.MapFrom(x => x.MemberName))*/
+                                               .ForMember(dest => dest.orderDetails, opt => opt.MapFrom(src => new List<OrderDetail>()));
+                                               /*.ForMember(dest => dest.DateCreated, otp => otp.MapFrom(x => x.DateCreated))
                                                .ForMember(dest => dest.DateGiveExpect, otp => otp.MapFrom(x => x.ExpectedReturnDate))
                                                .ForMember(dest => dest.DateGiveCurent, otp => otp.MapFrom(x => x.ActualReturnDate))
-                                               .ForMember(dest => dest.Status, otp => otp.MapFrom(x => x.OrderStatus));
+                                               .ForMember(dest => dest.Status, otp => otp.MapFrom(x => x.OrderStatus));*/
 
             CreateMap<Order, StatisticsDTO>().ForMember(dest => dest.BorrowerName, otp => otp.MapFrom(x => x.member.Name))
                                              .ForMember(dest => dest.LibrarianName, otp => otp.MapFrom(x => x.librarian.Name))

@@ -11,19 +11,28 @@ namespace BookWarehouse.Controllers
     public class AuthorController : Controller
     {
         private readonly IAuthorService _authorService;
-        private readonly AppDbContext _context;
+        private readonly ILogger<AuthorController> _logger;
 
-        public AuthorController(IAuthorService authorService, AppDbContext context)
+
+        public AuthorController(IAuthorService authorService, ILogger<AuthorController> logger)
         {
             _authorService = authorService;
-            _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAllByViewSQL()
         {
-            var datas = _authorService.GetAllByViewSQL();
-            return new OkObjectResult(datas);
+            try{
+                var datas = _authorService.GetAllByViewSQL();
+                _logger.LogInformation("Get success!");
+                return new OkObjectResult(datas);
+            }
+            catch(Exception ex) {
+                _logger.LogError(ex, "Get failed!");
+                return new StatusCodeResult(500);
+            }
+            
         }
 
         [HttpGet]

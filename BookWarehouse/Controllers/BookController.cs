@@ -10,17 +10,28 @@ namespace BookWarehouse.Controllers
     public class BookController : Controller
     {
         private readonly IBookService _bookService;
+        private readonly ILogger _logger;
 
-        public BookController(IBookService bookService)
+        public BookController(IBookService bookService, ILogger logger)
         {
             _bookService = bookService;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAllByViewSQL()
         {
-            var datas = _bookService.GetAllByViewSql();
-            return new OkObjectResult(datas);
+            try
+            {
+                var datas = _bookService.GetAllByViewSql();
+                _logger.LogInformation("Get success !");
+                return new OkObjectResult(datas);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Get failed !");
+                return new StatusCodeResult(500);
+            }
         }
 
         [HttpGet]

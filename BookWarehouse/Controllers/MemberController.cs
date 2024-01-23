@@ -10,16 +10,27 @@ namespace BookWarehouse.Controllers
     public class MemberController : Controller
     {
         private readonly IMemberService _memberService;
+        private readonly ILogger _logger;
 
-        public MemberController(IMemberService memberService)
+        public MemberController(IMemberService memberService, ILogger logger)
         {
             _memberService = memberService;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAllByViewSql()
         {
-            return new OkObjectResult(_memberService.GetAllByViewSql());
+            try
+            {
+               var datas = _memberService.GetAllByViewSql();
+                _logger.LogInformation("Get Success !");
+                return new OkObjectResult(datas);
+            }catch(Exception ex)
+            {
+                _logger.LogError("Get failed !");
+                return new StatusCodeResult(500);
+            }
         }
 
         [HttpGet]

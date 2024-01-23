@@ -9,17 +9,29 @@ namespace BookWarehouse.Controllers
     public class BookCategoryController : Controller
     {
         private readonly IBookCategoryService _bookCategoryService;
+        private readonly ILogger<BookCategoryController> _logger;
 
-        public BookCategoryController(IBookCategoryService bookCategoryService)
+        public BookCategoryController(IBookCategoryService bookCategoryService, ILogger<BookCategoryController> logger)
         {
             _bookCategoryService = bookCategoryService;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetAllByViewSQL()
         {
-            var datas = _bookCategoryService.GetAllByViewSQL();
-            return new OkObjectResult(datas);
+            try
+            {
+                var datas = _bookCategoryService.GetAllByViewSQL();
+                _logger.LogInformation("Get successs !");
+                return new OkObjectResult(datas);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Get failed!");
+                return new StatusCodeResult(500);
+            }
+            
         }
 
         [HttpGet]

@@ -11,9 +11,9 @@ namespace BookWarehouse.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
-        private readonly ILogger _logger;
+        private readonly ILogger<OrderController> _logger;
 
-        public OrderController(IOrderService orderService, ILogger logger)
+        public OrderController(IOrderService orderService, ILogger<OrderController> logger)
         {
             _orderService = orderService;
             _logger = logger;

@@ -1,5 +1,6 @@
 using AutoMapper;
 using BookWarehouse.DTO;
+using BookWarehouse.Quartz;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.BookWarehouseRepositories;
 using BookWarehouse.Service.AutoMappers;
@@ -8,7 +9,10 @@ using BookWarehouse.Service.Interfaces;
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Quartz;
+using Quartz.AspNetCore;
 using Serilog;
+using Serilog.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +22,7 @@ builder.Services.AddControllers();
 var connection = builder.Configuration.GetConnectionString("connection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection, o => o.MigrationsAssembly("BookWarehouse.DTO")));
 
-//Add support to logging with SERILOG
+//By the way 1, Add support to logging with SERILOG
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
@@ -27,6 +31,19 @@ builder.Services.AddLogging(lg =>
         lg.AddConsole();
     }
 );
+//By the way 2, Add support to logging with SERILOG
+/*builder.Host.UseSerilog();
+Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .Enrich.FromLogContext()
+                .Enrich.WithExceptionDetails()
+                .Enrich.WithMachineName()
+                .WriteTo.Console()
+                .WriteTo.Seq("http://localhost:5341", Serilog.Events.LogEventLevel.Information)
+                .CreateLogger();*/
+
+//register service Quartz
+builder.Services.AddInfratructure();
 
 builder.Services.AddControllers();
 

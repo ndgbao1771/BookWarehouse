@@ -10,9 +10,9 @@ namespace BookWarehouse.Controllers
     public class MemberController : Controller
     {
         private readonly IMemberService _memberService;
-        private readonly ILogger _logger;
+        private readonly ILogger<MemberController> _logger;
 
-        public MemberController(IMemberService memberService, ILogger logger)
+        public MemberController(IMemberService memberService, ILogger<MemberController> logger)
         {
             _memberService = memberService;
             _logger = logger;

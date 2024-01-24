@@ -10,9 +10,9 @@ namespace BookWarehouse.Controllers
     public class BookController : Controller
     {
         private readonly IBookService _bookService;
-        private readonly ILogger _logger;
+        private readonly ILogger<BookController> _logger;
 
-        public BookController(IBookService bookService, ILogger logger)
+        public BookController(IBookService bookService, ILogger<BookController> logger)
         {
             _bookService = bookService;
             _logger = logger;

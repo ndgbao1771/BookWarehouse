@@ -48,9 +48,15 @@ namespace BookWarehouse.Service.Implementation
             _bookRepository.Commit();
         }
 
-        public List<BookDTO> GetAll()
+        public List<BookDTO> GetAll(BookFilter filter)
         {
-            return _bookRepository.FindAll().ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
+            var query = _bookRepository.GetAllByViewSql();
+            query = query.Where(x => string.IsNullOrEmpty(filter.Name) || x.BookName == filter.Name)
+                         .Where(x => string.IsNullOrEmpty(filter.Author) || x.AuthorName == filter.Author)
+                         .Where(x => string.IsNullOrEmpty(filter.Seri) || x.BookSeri == filter.Seri)
+                         .Where(x => string.IsNullOrEmpty(filter.Category) || x.Category == filter.Category);
+
+            return query.ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
         public BookDTO GetBorrowedBook()
@@ -58,11 +64,9 @@ namespace BookWarehouse.Service.Implementation
             return _bookRepository.GetBorrowedBook().ProjectTo<BookDTO>(_mapper.ConfigurationProvider).FirstOrDefault();
         }
 
-        public BookDTO GetBySeri(string keyword)
+        public BookDTO GetById(int id)
         {
-            var datas = _bookRepository.GetBySeri(keyword);
-            var datasView = _mapper.Map<Book, BookDTO>(datas);
-            return datasView;
+            return _mapper.Map<Book, BookDTO>(_bookRepository.FindById(id));
         }
 
         public void Update(BookUpdateDTO bookUpdateDTO)
@@ -79,23 +83,6 @@ namespace BookWarehouse.Service.Implementation
                 _bookRepository.Updated(datas);
                 _bookRepository.Commit();
             }
-        }
-
-        public List<BookDTO> GetByFilter(BookFilter filter)
-        {
-            var query = _bookRepository.GetQueryable();
-            query = query.Include(bd => bd.bookDetails)
-                         .Where(x => string.IsNullOrEmpty(filter.Seri) || x.bookDetails.Select(x => x.Seri).ToList().Contains(filter.Seri))
-                         .Where(x => filter.Id == null || x.Id == filter.Id)
-                         .Where(BookQueryExtension.BookNameFilter(filter))
-                         .Where(BookQueryExtension.AuthorNameFilter(filter));
-            return query.ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
-        }
-
-        public List<BookDTO> GetAllByViewSql()
-        {
-            var datas = _bookRepository.GetAllByViewSql().ProjectTo<BookDTO>(_mapper.ConfigurationProvider).ToList();
-            return datas;
         }
     }
 }

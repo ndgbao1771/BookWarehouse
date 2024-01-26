@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookWarehouse.Controllers
 {
     [ApiController]
-    [Route("/api/librarian/[action]")]
+    [Route("/libratians")]
     public class LibrarianController : Controller
     {
         private readonly ILibrarianService _librarianService;
         private readonly ILogger<LibrarianController> _logger;
+
         public LibrarianController(ILibrarianService librarianService, ILogger<LibrarianController> logger)
         {
             _librarianService = librarianService;
@@ -18,26 +19,11 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllByViewSql()
+        [Route("")]
+        public IActionResult GetAll([FromQuery] LibrarianFilter filter)
         {
-            try
-            {
-                var datas = _librarianService.GetAllByViewSql();
-                _logger.LogInformation("Get Success");
-                return View(datas);
-            }catch (Exception ex)
-            {
-                _logger.LogError("Get failed !");
-                return new StatusCodeResult(500);
-            }
-            
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var datas = _librarianService.GetAll();
-            if(datas == null)
+            var datas = _librarianService.GetAll(filter);
+            if (datas == null)
             {
                 return BadRequest("No data to show!");
             }
@@ -48,9 +34,10 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetById(int id)
+        [Route("{id}")]
+        public IActionResult GetById([FromQuery] int id)
         {
-            if(id == 0)
+            if (id == 0)
             {
                 return NotFound("Can't find librarian by id equal zero!");
             }
@@ -60,27 +47,9 @@ namespace BookWarehouse.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult GetByName(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                return BadRequest("Please fill in accurately and completely librarian name!");
-            }
-            else
-            {
-                return new OkObjectResult(_librarianService.GetByName(name));
-            }
-        }
-
-        [HttpGet]
-        public IActionResult GetByFilter([FromQuery] LibrarianFilter filter)
-        {
-            return new OkObjectResult(_librarianService.GetByFilter(filter));
-        }
-
         [HttpPost]
-        public IActionResult AddEntity(LibrarianDTO librarianDTO)
+        [Route("")]
+        public IActionResult AddEntity([FromQuery] LibrarianDTO librarianDTO)
         {
             if (ModelState.IsValid)
             {
@@ -91,6 +60,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
+        [Route("")]
         public IActionResult UpdateEntity(LibrarianDTO librarianDTO)
         {
             if (ModelState.IsValid)
@@ -102,9 +72,10 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public IActionResult Delete(int id)
         {
-            if(id == 0)
+            if (id == 0)
             {
                 return NotFound("Can't delete by id equal zero!");
             }

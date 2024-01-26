@@ -15,27 +15,9 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         {
             _context = context;
         }
-
-        public IQueryable<AuthorViewSQL> GetAllByViewSQL()
+        public IQueryable<AuthorViewSQL> GetQueryable()
         {
-            var datas = _context.authorViewSQLs;
-            return datas;
-        }
-
-        public IQueryable<Author> GetAllView()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Author> GetByName(string name)
-        {
-            var datas = _context.Authors.Where(x => x.Name.Contains(name));
-            return datas;
-        }
-
-        public IQueryable<Author> GetQueryable()
-        {
-            return _context.Authors.AsQueryable();
+            return _context.authorViewSQLs.AsQueryable();
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookWarehouse.Controllers
 {
     [ApiController]
-    [Route("/api/member/[action]")]
+    [Route("/member")]
     public class MemberController : Controller
     {
         private readonly IMemberService _memberService;
@@ -19,30 +19,10 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllByViewSql()
+        [Route("")]
+        public IActionResult GetAll([FromQuery] MemberFilter filter)
         {
-            try
-            {
-               var datas = _memberService.GetAllByViewSql();
-                _logger.LogInformation("Get Success !");
-                return new OkObjectResult(datas);
-            }catch(Exception ex)
-            {
-                _logger.LogError("Get failed !");
-                return new StatusCodeResult(500);
-            }
-        }
-
-        [HttpGet]
-        public IActionResult GetByFilter([FromQuery] MemberFilter filter)
-        {
-            return new OkObjectResult(_memberService.GetByFilter(filter));
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var datas = _memberService.GetAll();
+            var datas = _memberService.GetAll(filter);
             if (datas == null)
             {
                 return NotFound("No data to show");
@@ -54,6 +34,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
         public IActionResult GetById(int id)
         {
             if (id == 0)
@@ -66,21 +47,9 @@ namespace BookWarehouse.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult GetByName(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                return NotFound();
-            }
-            else
-            {
-                return new OkObjectResult(_memberService.GetByName(name));
-            }
-        }
-
         [HttpPost]
-        public IActionResult AddEntity(MemberDTO memberDTO)
+        [Route("")]
+        public IActionResult AddEntity([FromQuery] MemberDTO memberDTO)
         {
             if (ModelState.IsValid)
             {
@@ -91,6 +60,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
+        [Route("")]
         public IActionResult UpdateEntity(MemberDTO memberDTO)
         {
             if (ModelState.IsValid)
@@ -102,6 +72,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public IActionResult Delete(int id)
         {
             if (id == 0)

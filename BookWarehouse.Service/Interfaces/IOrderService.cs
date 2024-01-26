@@ -1,22 +1,16 @@
-﻿using BookWarehouse.DTO.Enums;
-using BookWarehouse.Service.EntityDTOs;
+﻿using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Filters;
 
 namespace BookWarehouse.Service.Interfaces
 {
     public interface IOrderService
     {
-        List<OrderDTO> GetAllByViewSql();
-        List<OrderDTO> GetAll();
-
-        List<OrderDTO> GetByNameMember(string name);
-
-        List<OrderDTO> GetByNameLibrarian(string name);
-
-        List<OrderDTO> GetByStatus(StatusAble status);
-
-        List<OrderDTO> GetByFilter(OrderFilter filter);
-
+        List<OrderDTO> GetAll(OrderFilter filter);
+        /// <summary>
+        /// Get Order By Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         OrderDTO GetById(int id);
 
         OrderDTO GetListBookProgressOfMember(int id);

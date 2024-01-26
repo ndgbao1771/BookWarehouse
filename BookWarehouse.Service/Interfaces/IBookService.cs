@@ -5,14 +5,11 @@ namespace BookWarehouse.Service.Interfaces
 {
     public interface IBookService
     {
-        List<BookDTO> GetAllByViewSql();
-        List<BookDTO> GetAll();
+        List<BookDTO> GetAll(BookFilter filter);
+
+        BookDTO GetById(int id);
 
         BookDTO GetBorrowedBook();
-
-        BookDTO GetBySeri(string keyword);
-
-        List<BookDTO> GetByFilter(BookFilter filter);
 
         BookUpdateDTO Add(BookUpdateDTO bookUpdateDTO);
 

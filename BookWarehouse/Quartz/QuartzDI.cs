@@ -4,7 +4,7 @@ namespace BookWarehouse.Quartz
 {
     public static class QuartzDI
     {
-        public static void AddInfratructure(this IServiceCollection services)
+        public static void AddInfratructureQuartz(this IServiceCollection services)
         {
             services.AddQuartz(options =>
             {

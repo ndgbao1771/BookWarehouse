@@ -4,7 +4,6 @@ namespace BookWarehouse.Service.Interfaces
 {
     public interface IBookCategoryService
     {
-        List<BookCategoryDTO> GetAllByViewSQL();
         List<BookCategoryDTO> GetAll();
 
         BookCategoryDTO GetById(int id);

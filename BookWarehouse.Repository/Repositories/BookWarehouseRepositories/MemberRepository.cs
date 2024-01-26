@@ -19,17 +19,5 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
         {
             return _context.memberViewSQLs;
         }
-
-        public IQueryable<Member> GetByName(string name)
-        {
-            var datas = _context.Members.Where(x => x.Name.Contains(name));
-            return datas;
-        }
-
-        public IQueryable<Member> GetQueryable()
-        {
-            var query = _context.Members.AsQueryable();
-            return query;
-        }
     }
 }

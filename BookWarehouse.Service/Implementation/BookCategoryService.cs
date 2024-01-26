@@ -35,12 +35,6 @@ namespace BookWarehouse.Service.Implementation
 
         public List<BookCategoryDTO> GetAll()
         {
-            var datas = _bookCategoryRepository.FindAll().ProjectTo<BookCategoryDTO>(_mapper.ConfigurationProvider).ToList();
-            return datas;
-        }
-
-        public List<BookCategoryDTO> GetAllByViewSQL()
-        {
             var datas = _bookCategoryRepository.GetAllByViewSQL().ProjectTo<BookCategoryDTO>(_mapper.ConfigurationProvider).ToList();
             return datas;
         }

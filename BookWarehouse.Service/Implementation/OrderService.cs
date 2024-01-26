@@ -49,29 +49,20 @@ namespace BookWarehouse.Service.Implementation
             _orderRepository.Commit();
         }
 
-        public List<OrderDTO> GetAll()
+        public List<OrderDTO> GetAll(OrderFilter filter)
         {
-            return _orderRepository.FindAll().ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
+            var query = _orderRepository.GetAllByViewSql();
+            query = query.Where(x => string.IsNullOrEmpty(filter.MemberName) || x.MemberName == filter.MemberName)
+                         .Where(x => string.IsNullOrEmpty(filter.LibrarianName) || x.LibratianName == filter.LibrarianName)
+                         .Where(x => x.OrderStatus != null || x.OrderStatus == filter.StatusAble)
+                         .Where(x => x.DateCreated != null || x.DateCreated == filter.CreatedDate)
+                         .Where(x => x.ActualReturnDate != null || x.ActualReturnDate == filter.DateGiveCurrent);
+            return query.ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
         public OrderDTO GetById(int id)
         {
             return _mapper.Map<Order, OrderDTO>(_orderRepository.GetById(id).FirstOrDefault());
-        }
-
-        public List<OrderDTO> GetByNameLibrarian(string name)
-        {
-            return _mapper.Map<List<Order>, List<OrderDTO>>(_orderRepository.GetByNameLibrarian(name).ToList());
-        }
-
-        public List<OrderDTO> GetByNameMember(string name)
-        {
-            return _mapper.Map<List<Order>, List<OrderDTO>>(_orderRepository.GetByNameMember(name).ToList());
-        }
-
-        public List<OrderDTO> GetByStatus(StatusAble status)
-        {
-            return _mapper.Map<List<Order>, List<OrderDTO>>(_orderRepository.GetByStatus(status).ToList());
         }
 
         public OrderDTO GetListBookProgressOfMember(int id)
@@ -121,21 +112,6 @@ namespace BookWarehouse.Service.Implementation
                 _orderRepository.Updated(exist);
                 _orderRepository.Commit();
             }
-        }
-
-        public List<OrderDTO> GetByFilter(OrderFilter filter)
-        {
-            var datas = _orderRepository.GetQueryable();
-            datas = datas.Where(x => filter.Id == null || x.Id == filter.Id)
-                         .Where(y => string.IsNullOrEmpty(filter.MemberName) || y.member.Name.Contains(filter.MemberName))
-                         .Where(z => string.IsNullOrEmpty(filter.LibrarianName) || z.librarian.Name.Contains(filter.LibrarianName))
-                         .Where(o => filter.CreatedDate == null || o.DateCreated.Date == filter.CreatedDate.Value.Date);
-            return datas.ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
-        }
-
-        public List<OrderDTO> GetAllByViewSql()
-        {
-            return _orderRepository.GetAllByViewSql().ProjectTo<OrderDTO>(_mapper.ConfigurationProvider).ToList();
         }
     }
 }

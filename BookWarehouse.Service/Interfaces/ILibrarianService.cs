@@ -5,14 +5,9 @@ namespace BookWarehouse.Service.Interfaces
 {
     public interface ILibrarianService
     {
-        List<LibrarianDTO> GetAllByViewSql();
-        List<LibrarianDTO> GetAll();
+        List<LibrarianDTO> GetAll(LibrarianFilter filter);
 
         LibrarianDTO GetById(int id);
-
-        List<LibrarianDTO> GetByName(string name);
-
-        List<LibrarianDTO> GetByFilter(LibrarianFilter filter);
 
         LibrarianDTO Add(LibrarianDTO librarianDTO);
 

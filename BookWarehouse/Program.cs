@@ -1,18 +1,15 @@
 using AutoMapper;
 using BookWarehouse.DTO;
+using BookWarehouse.Extensions;
 using BookWarehouse.Quartz;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.BookWarehouseRepositories;
 using BookWarehouse.Service.AutoMappers;
 using BookWarehouse.Service.Implementation;
 using BookWarehouse.Service.Interfaces;
-using CsvHelper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Quartz;
-using Quartz.AspNetCore;
 using Serilog;
-using Serilog.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
-builder.Services.AddLogging(lg => 
+builder.Services.AddLogging(lg =>
     {
         lg.AddConsole();
     }
@@ -43,7 +40,7 @@ Log.Logger = new LoggerConfiguration()
                 .CreateLogger();*/
 
 //register service Quartz
-builder.Services.AddInfratructure();
+builder.Services.AddInfratructureQuartz();
 
 builder.Services.AddControllers();
 
@@ -69,13 +66,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
+app.UseMiddleware<GlobalRoutePrefixMiddleware>("/api/");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+
 
 app.UseStaticFiles();
 //Add support to logging request with SERILOG
@@ -86,6 +86,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UsePathBase(new PathString("/api/"));
+app.UseRouting();
+
 
 app.Run();
-

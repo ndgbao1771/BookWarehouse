@@ -32,32 +32,16 @@ namespace BookWarehouse.Service.Implementation
             _memberRepository.Commit();
         }
 
-        public List<MemberDTO> GetAll()
+        public List<MemberDTO> GetAll(MemberFilter filter)
         {
-            return _memberRepository.FindAll().ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).ToList();
-        }
-
-        public List<MemberDTO> GetAllByViewSql()
-        {
-            return _memberRepository.GetAllByViewSql().ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).ToList();
-        }
-
-        public List<MemberDTO> GetByFilter(MemberFilter filter)
-        {
-            var query = _memberRepository.GetQueryable();
-            query = query.Where(x => filter.Id == null || x.Id == filter.Id)
-                         .Where(x => string.IsNullOrEmpty(filter.Name) || x.Name == filter.Name);
+            var query = _memberRepository.GetAllByViewSql();
+            query = query.Where(x => string.IsNullOrEmpty(filter.Name) || x.MemberName == filter.Name);
             return query.ProjectTo<MemberDTO>(_mapper.ConfigurationProvider).ToList();
         }
 
         public MemberDTO GetById(int id)
         {
             return _mapper.Map<Member, MemberDTO>(_memberRepository.FindById(id));
-        }
-
-        public List<MemberDTO> GetByName(string name)
-        {
-            return _mapper.Map<List<Member>, List<MemberDTO>>(_memberRepository.GetByName(name).ToList());
         }
 
         public void Update(MemberDTO memberDTO)

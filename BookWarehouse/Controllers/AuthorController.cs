@@ -1,4 +1,3 @@
-using BookWarehouse.DTO;
 using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
@@ -7,12 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookWarehouse.Controllers
 {
     [ApiController]
-    [Route("/api/author/[action]")]
+    [Route("authors")]
     public class AuthorController : Controller
     {
         private readonly IAuthorService _authorService;
         private readonly ILogger<AuthorController> _logger;
-
 
         public AuthorController(IAuthorService authorService, ILogger<AuthorController> logger)
         {
@@ -21,43 +19,15 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllByViewSQL()
+        [Route("")]
+        public IActionResult GetByFilter([FromQuery] AuthorFilter filter)
         {
-            try{
-                var datas = _authorService.GetAllByViewSQL();
-                _logger.LogInformation("Get success!");
-                return new OkObjectResult(datas);
-            }
-            catch(Exception ex) {
-                _logger.LogError(ex, "Get failed!");
-                return new StatusCodeResult(500);
-            }
-            
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var datas = _authorService.GetAll();
-            if (datas == null)
-            {
-                return NotFound(); //Error 404
-            }
+            var datas = _authorService.GetByFilter(filter);
             return new OkObjectResult(datas);
         }
 
         [HttpGet]
-        public IActionResult GetByName(string name)
-        {
-            var datas = _authorService.GetByName(name);
-            if (datas == null)
-            {
-                return NotFound(); //Error 404
-            }
-            return new OkObjectResult(datas);
-        }
-
-        [HttpGet]
+        [Route("{id}")]
         public IActionResult GetById(int id)
         {
             if (id == 0)
@@ -78,15 +48,9 @@ namespace BookWarehouse.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult GetByFilter([FromQuery] AuthorFilter filter)
-        {
-            var datas = _authorService.GetByFilter(filter);
-            return new OkObjectResult(datas);
-        }
-
         [HttpPost]
-        public IActionResult AddEntity(AuthorDTO authorDTO)
+        [Route("")]
+        public IActionResult AddEntity([FromQuery] AuthorDTO authorDTO)
         {
             if (ModelState.IsValid)
             {
@@ -100,6 +64,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
+        [Route("")]
         public IActionResult UpdateEntity(AuthorDTO authorDTO)
         {
             if (ModelState.IsValid)
@@ -111,6 +76,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public IActionResult Delete(int id)
         {
             if (id == 0)

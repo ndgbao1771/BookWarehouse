@@ -6,10 +6,6 @@ namespace BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories
 {
     public interface ILibrarianRepository : IRepository<Librarian, int>
     {
-        IQueryable<Librarian> GetByName(string name);
-
-        IQueryable<Librarian> GetQueryable();
-
         IQueryable<LibratianViewSQL> GetAllByViewSql();
     }
 }

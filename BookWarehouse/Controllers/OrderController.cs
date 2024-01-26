@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookWarehouse.Controllers
 {
     [ApiController]
-    [Route("/api/order/[action]")]
+    [Route("/order")]
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
@@ -20,33 +20,14 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllByViewSql()
+        [Route("")]
+        public IActionResult GetAll([FromQuery] OrderFilter filter)
         {
-            try
-            {
-                var datas = _orderService.GetAllByViewSql();
-                _logger.LogInformation("Get success !");
-                return new OkObjectResult(datas);
-            }catch(Exception ex)
-            {
-                _logger.LogError("Get failed !");
-                return new StatusCodeResult(500);
-            }
+            return new OkObjectResult(_orderService.GetAll(filter));
         }
 
         [HttpGet]
-        public IActionResult GetByFilter([FromQuery]OrderFilter filter)
-        {
-            return new OkObjectResult(_orderService.GetByFilter(filter));
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            return new OkObjectResult(_orderService.GetAll());
-        }
-
-        [HttpGet]
+        [Route("{id}")]
         public IActionResult GetById(int id)
         {
             var datas = _orderService.GetById(id);
@@ -54,36 +35,21 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByNameMember(string name)
-        {
-            return new OkObjectResult(_orderService.GetByNameMember(name));
-        }
-
-        [HttpGet]
-        public IActionResult GetByNameLib(string name)
-        {
-            return new OkObjectResult(_orderService.GetByNameLibrarian(name));
-        }
-
-        [HttpGet]
-        public IActionResult GetByStatus(StatusAble status)
-        {
-            return new OkObjectResult(_orderService.GetByStatus(status));
-        }
-
-        [HttpGet]
+        [Route("{id}/books")]
         public IActionResult GetListBookProgressOfMember(int id)
         {
             return new OkObjectResult(_orderService.GetListBookProgressOfMember(id));
         }
 
         [HttpGet]
+        [Route("statistics")]
         public IActionResult GetStatistics(DateTime dateStart, DateTime dateEnd)
         {
             return new OkObjectResult(_orderService.GetStatistics(dateStart, dateEnd));
         }
 
         [HttpPost]
+        [Route("/order")]
         public IActionResult CreatedBookLoanReceipt(OrderAddDTO orderDTO)
         {
             if (ModelState.IsValid)
@@ -102,6 +68,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
+        [Route("/order")]
         public IActionResult BookReturnReceipt(OrderUpdateDTO orderDTO)
         {
             if (ModelState.IsValid)
@@ -113,6 +80,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
+        [Route("/order/{id}")]
         public IActionResult Delete(int id)
         {
             _orderService.Delete(id);

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BookWarehouse.Controllers
 {
     [ApiController]
-    [Route("/api/bookCategory/[action]")]
+    [Route("bookcategory")]
     public class BookCategoryController : Controller
     {
         private readonly IBookCategoryService _bookCategoryService;
@@ -18,23 +18,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllByViewSQL()
-        {
-            try
-            {
-                var datas = _bookCategoryService.GetAllByViewSQL();
-                _logger.LogInformation("Get successs !");
-                return new OkObjectResult(datas);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Get failed!");
-                return new StatusCodeResult(500);
-            }
-            
-        }
-
-        [HttpGet]
+        [Route("")]
         public IActionResult GetAll()
         {
             var datas = _bookCategoryService.GetAll();
@@ -49,6 +33,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
         public IActionResult GetById(int id)
         {
             if(id == 0)
@@ -63,6 +48,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPost]
+        [Route("")]
         public IActionResult AddEntity(BookCategoryDTO bookCategoryDTO)
         {
             if(bookCategoryDTO == null)
@@ -81,6 +67,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
+        [Route("")]
         public IActionResult UpdateEntity(BookCategoryDTO bookCategoryDTO)
         {
             if (ModelState.IsValid)
@@ -92,6 +79,7 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public IActionResult Delete(int id)
         {
             if(id == 0)

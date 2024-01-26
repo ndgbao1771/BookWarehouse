@@ -16,7 +16,7 @@ namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
 
         public IQueryable<CategoryViewSQL> GetAllByViewSQL()
         {
-            var datas = _context.categoryViewSQLs;
+            var datas = _context.categoryViewSQLs.AsQueryable();
             return datas;
         }
     }

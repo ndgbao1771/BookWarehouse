@@ -39,14 +39,30 @@ namespace BookWarehouse.Service.Implementation
 
         public void Delete(int id)
         {
-            _authorRepository.Remove(id);
-            _authorRepository.Commit();
+            var result = GetById(id);
+            if(result == null)
+            {
+                return;
+            }
+            else
+            {
+                _authorRepository.Remove(id);
+                _authorRepository.Commit();
+            }
         }
 
         public void Update(AuthorDTO authorDTO)
         {
-            _authorRepository.Updated(_mapper.Map<AuthorDTO, Author>(authorDTO));
-            _authorRepository.Commit();
+            var result = GetById(authorDTO.Id);
+            if (result == null)
+            {
+                return;
+            }
+            else
+            {
+                _authorRepository.Updated(_mapper.Map<AuthorDTO, Author>(authorDTO));
+                _authorRepository.Commit();
+            }
         }
     }
 }

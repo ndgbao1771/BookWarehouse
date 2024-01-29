@@ -13,6 +13,8 @@ namespace BookWarehouse.Service.Interfaces
 
         BookUpdateDTO Add(BookUpdateDTO bookUpdateDTO);
 
+        FileInfo ExportToExcell();
+
         void Update(BookUpdateDTO bookUpdateDTO);
 
         void Delete(int id);

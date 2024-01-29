@@ -29,8 +29,16 @@ namespace BookWarehouse.Service.Implementation
 
         public void Delete(int id)
         {
-            _bookCategoryRepository.Remove(id);
-            _bookCategoryRepository.Commit();
+            var result = GetById(id);
+            if(result == null)
+            {
+                return;
+            }
+            else
+            {
+                _bookCategoryRepository.Remove(id);
+                _bookCategoryRepository.Commit();
+            }
         }
 
         public List<BookCategoryDTO> GetAll()
@@ -46,9 +54,17 @@ namespace BookWarehouse.Service.Implementation
 
         public void Update(BookCategoryDTO bookCategoryDTO)
         {
-            var datas = _mapper.Map<BookCategoryDTO, BookCategory>(bookCategoryDTO);
-            _bookCategoryRepository.Updated(datas);
-            _bookCategoryRepository.Commit();
+            var result = GetById(bookCategoryDTO.Id);
+            if (result == null)
+            {
+                return;
+            }
+            else
+            {
+                var datas = _mapper.Map<BookCategoryDTO, BookCategory>(bookCategoryDTO);
+                _bookCategoryRepository.Updated(datas);
+                _bookCategoryRepository.Commit();
+            }
         }
     }
 }

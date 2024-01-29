@@ -28,8 +28,16 @@ namespace BookWarehouse.Service.Implementation
 
         public void Delete(int id)
         {
-            _librarianRepository.Remove(id);
-            _librarianRepository.Commit();
+            var result = GetById(id);
+            if(result == null)
+            {
+                return;
+            }
+            else
+            {
+                _librarianRepository.Remove(id);
+                _librarianRepository.Commit();
+            }
         }
 
         public List<LibrarianDTO> GetAll(LibrarianFilter filter)
@@ -46,8 +54,16 @@ namespace BookWarehouse.Service.Implementation
 
         public void Update(LibrarianDTO librarianDTO)
         {
-            _librarianRepository.Updated(_mapper.Map<LibrarianDTO, Librarian>(librarianDTO));
-            _librarianRepository.Commit();
+            var result = GetById(librarianDTO.Id);
+            if(result == null)
+            {
+                return;
+            }
+            else
+            {
+                _librarianRepository.Updated(_mapper.Map<LibrarianDTO, Librarian>(librarianDTO));
+                _librarianRepository.Commit();
+            }
         }
     }
 }

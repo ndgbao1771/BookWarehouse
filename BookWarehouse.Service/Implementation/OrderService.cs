@@ -2,7 +2,6 @@
 using AutoMapper.QueryableExtensions;
 using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
-using BookWarehouse.DTO.Enums;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.Csv;
 using BookWarehouse.Service.EntityDTOs;
@@ -45,8 +44,16 @@ namespace BookWarehouse.Service.Implementation
 
         public void Delete(int id)
         {
-            _orderRepository.Remove(id);
-            _orderRepository.Commit();
+            var result = GetById(id);
+            if (result == null)
+            {
+                return;
+            }
+            else
+            {
+                _orderRepository.Remove(id);
+                _orderRepository.Commit();
+            }
         }
 
         public List<OrderDTO> GetAll(OrderFilter filter)
@@ -104,13 +111,21 @@ namespace BookWarehouse.Service.Implementation
 
         public void Update(OrderUpdateDTO orderDTO)
         {
-            var exist = _orderRepository.FindById(orderDTO.Id, x => x.orderDetails);
-            if (exist != null)
+            var result = GetById(orderDTO.Id);
+            if (result == null)
             {
-                exist.Status = orderDTO.Status;
-                exist.orderDetails.ForEach(x => x.DateGiveCurrent = orderDTO.DateGiveCurent);
-                _orderRepository.Updated(exist);
-                _orderRepository.Commit();
+                return;
+            }
+            else
+            {
+                var exist = _orderRepository.FindById(orderDTO.Id, x => x.orderDetails);
+                if (exist != null)
+                {
+                    exist.Status = orderDTO.Status;
+                    exist.orderDetails.ForEach(x => x.DateGiveCurrent = orderDTO.DateGiveCurent);
+                    _orderRepository.Updated(exist);
+                    _orderRepository.Commit();
+                }
             }
         }
     }

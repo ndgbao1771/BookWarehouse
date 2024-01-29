@@ -28,8 +28,16 @@ namespace BookWarehouse.Service.Implementation
 
         public void Delete(int id)
         {
-            _memberRepository.Remove(id);
-            _memberRepository.Commit();
+            var result = GetById(id);
+            if(result == null)
+            {
+                return;
+            }
+            else
+            {
+                _memberRepository.Remove(id);
+                _memberRepository.Commit();
+            }
         }
 
         public List<MemberDTO> GetAll(MemberFilter filter)
@@ -46,8 +54,16 @@ namespace BookWarehouse.Service.Implementation
 
         public void Update(MemberDTO memberDTO)
         {
-            _memberRepository.Updated(_mapper.Map<MemberDTO, Member>(memberDTO));
-            _memberRepository.Commit();
+            var result = GetById(memberDTO.Id);
+            if(result == null)
+            {
+                return;
+            }
+            else
+            {
+                _memberRepository.Updated(_mapper.Map<MemberDTO, Member>(memberDTO));
+                _memberRepository.Commit();
+            }
         }
     }
 }

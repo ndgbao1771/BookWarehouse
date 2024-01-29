@@ -19,6 +19,21 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpGet]
+        [Route("ExportToExcel")]
+        public IActionResult ExportToExcel()
+        {
+            var datas = _bookService.ExportToExcell();
+            if (datas == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok();
+            }
+        }
+
+        [HttpGet]
         [Route("")]
         public IActionResult GetAll([FromQuery]BookFilter filter)
         {

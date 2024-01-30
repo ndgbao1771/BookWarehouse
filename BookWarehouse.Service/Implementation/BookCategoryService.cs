@@ -4,12 +4,13 @@ using BookWarehouse.DTO.Entities;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Interfaces;
-using System.Linq;
 
 namespace BookWarehouse.Service.Implementation
 {
     public class BookCategoryService : IBookCategoryService
     {
+        #region Contructor
+
         private readonly IBookCategoryRepository _bookCategoryRepository;
         private readonly IMapper _mapper;
 
@@ -18,6 +19,10 @@ namespace BookWarehouse.Service.Implementation
             _bookCategoryRepository = bookCategoryRepository;
             _mapper = mapper;
         }
+
+        #endregion Contructor
+
+        #region Method
 
         public BookCategoryDTO Add(BookCategoryDTO bookCategoryDTO)
         {
@@ -30,7 +35,7 @@ namespace BookWarehouse.Service.Implementation
         public void Delete(int id)
         {
             var result = GetById(id);
-            if(result == null)
+            if (result == null)
             {
                 return;
             }
@@ -66,5 +71,7 @@ namespace BookWarehouse.Service.Implementation
                 _bookCategoryRepository.Commit();
             }
         }
+
+        #endregion Method
     }
 }

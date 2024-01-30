@@ -29,7 +29,7 @@ namespace BookWarehouse.Controllers
             }
             else
             {
-                return new OkObjectResult(datas);
+                return Ok(datas);
             }
         }
 
@@ -43,7 +43,8 @@ namespace BookWarehouse.Controllers
             }
             else
             {
-                return new OkObjectResult(_librarianService.GetById(id));
+                var datas = _librarianService.GetById(id);
+                return Ok(datas);
             }
         }
 
@@ -54,7 +55,7 @@ namespace BookWarehouse.Controllers
             if (ModelState.IsValid)
             {
                 _librarianService.Add(librarianDTO);
-                return new OkObjectResult(librarianDTO);
+                return Created();
             }
             return BadRequest();
         }
@@ -66,7 +67,7 @@ namespace BookWarehouse.Controllers
             if (ModelState.IsValid)
             {
                 _librarianService.Update(librarianDTO);
-                return new OkObjectResult(librarianDTO);
+                return Ok(librarianDTO);
             }
             return BadRequest();
         }
@@ -81,8 +82,16 @@ namespace BookWarehouse.Controllers
             }
             else
             {
-                _librarianService.Delete(id);
-                return Ok("Delete success");
+                var checkExist = GetById(id);
+                if (checkExist == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _librarianService.Delete(id);
+                    return NoContent();
+                }
             }
         }
     }

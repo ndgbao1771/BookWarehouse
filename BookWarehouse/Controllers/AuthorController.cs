@@ -23,7 +23,14 @@ namespace BookWarehouse.Controllers
         public IActionResult GetByFilter([FromQuery] AuthorFilter filter)
         {
             var datas = _authorService.GetByFilter(filter);
-            return new OkObjectResult(datas);
+            if(datas == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok();
+            }
         }
 
         [HttpGet]
@@ -43,7 +50,7 @@ namespace BookWarehouse.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(datas);
+                    return Ok();
                 }
             }
         }
@@ -54,8 +61,8 @@ namespace BookWarehouse.Controllers
         {
             if (ModelState.IsValid)
             {
-                var datas = _authorService.Add(authorDTO);
-                return new OkObjectResult(datas);
+                _authorService.Add(authorDTO);
+                return Created();
             }
             else
             {
@@ -70,7 +77,7 @@ namespace BookWarehouse.Controllers
             if (ModelState.IsValid)
             {
                 _authorService.Update(authorDTO);
-                return Ok(authorDTO);
+                return Created();
             }
             return BadRequest(authorDTO);
         }
@@ -85,8 +92,16 @@ namespace BookWarehouse.Controllers
             }
             else
             {
-                _authorService.Delete(id);
-                return Ok("Delete success!");
+                var checkExist = GetById(id);
+                if (checkExist == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _authorService.Delete(id);
+                    return NoContent();
+                }
             }
         }
     }

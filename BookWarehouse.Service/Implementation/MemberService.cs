@@ -10,6 +10,8 @@ namespace BookWarehouse.Service.Implementation
 {
     public class MemberService : IMemberService
     {
+        #region Contructor
+
         private readonly IMemberRepository _memberRepository;
         private readonly IMapper _mapper;
 
@@ -18,6 +20,10 @@ namespace BookWarehouse.Service.Implementation
             _memberRepository = memberRepository;
             _mapper = mapper;
         }
+
+        #endregion Contructor
+
+        #region Method
 
         public MemberDTO Add(MemberDTO memberDTO)
         {
@@ -29,7 +35,7 @@ namespace BookWarehouse.Service.Implementation
         public void Delete(int id)
         {
             var result = GetById(id);
-            if(result == null)
+            if (result == null)
             {
                 return;
             }
@@ -55,7 +61,7 @@ namespace BookWarehouse.Service.Implementation
         public void Update(MemberDTO memberDTO)
         {
             var result = GetById(memberDTO.Id);
-            if(result == null)
+            if (result == null)
             {
                 return;
             }
@@ -65,5 +71,7 @@ namespace BookWarehouse.Service.Implementation
                 _memberRepository.Commit();
             }
         }
+
+        #endregion Method
     }
 }

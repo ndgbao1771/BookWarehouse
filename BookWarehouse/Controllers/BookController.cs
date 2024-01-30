@@ -44,7 +44,7 @@ namespace BookWarehouse.Controllers
             }
             else
             {
-                return new OkObjectResult(datas);
+                return Ok();
             }
         }
 
@@ -59,7 +59,7 @@ namespace BookWarehouse.Controllers
             }
             else
             {
-                return new OkObjectResult(datas);
+                return Ok();
             }
         }
 
@@ -76,7 +76,7 @@ namespace BookWarehouse.Controllers
                 if (ModelState.IsValid)
                 {
                     var datas = _bookService.Add(entity);
-                    return new OkObjectResult(datas);
+                    return Created();
                 }
                 return BadRequest(ModelState);
             }
@@ -111,8 +111,16 @@ namespace BookWarehouse.Controllers
             }
             else
             {
-                _bookService.Delete(id);
-                return Ok(id);
+                var checkExist = _bookService.GetById(id);
+                if(checkExist == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _bookService.Delete(id);
+                    return NoContent();
+                }
             }
         }
     }

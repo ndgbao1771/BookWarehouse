@@ -1,5 +1,4 @@
-﻿using BookWarehouse.DTO.Enums;
-using BookWarehouse.Service.EntityDTOs;
+﻿using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -23,48 +22,89 @@ namespace BookWarehouse.Controllers
         [Route("")]
         public IActionResult GetAll([FromQuery] OrderFilter filter)
         {
-            return new OkObjectResult(_orderService.GetAll(filter));
+            var datas = _orderService.GetAll(filter);
+            if (datas == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(datas);
+            }
         }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            var datas = _orderService.GetById(id);
-            return new OkObjectResult(datas);
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                var datas = _orderService.GetById(id);
+                if (datas == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
         }
 
         [HttpGet]
         [Route("{id}/books")]
         public IActionResult GetListBookProgressOfMember(int id)
         {
-            return new OkObjectResult(_orderService.GetListBookProgressOfMember(id));
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var datas = _orderService.GetListBookProgressOfMember(id);
+                if (datas == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
         }
 
         [HttpGet]
         [Route("statistics")]
         public IActionResult GetStatistics(DateTime dateStart, DateTime dateEnd)
         {
-            return new OkObjectResult(_orderService.GetStatistics(dateStart, dateEnd));
+            var datas = _orderService.GetStatistics(dateStart, dateEnd);
+            if (datas == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(datas);
+            }
         }
 
         [HttpPost]
-        [Route("/order")]
+        [Route("")]
         public IActionResult CreatedBookLoanReceipt(OrderAddDTO orderDTO)
         {
             if (ModelState.IsValid)
             {
-                if (orderDTO.BookId != 0)
-                {
-                    _orderService.Add(orderDTO);
-                    return Ok("Add success");
-                }
-                else
-                {
-                    return BadRequest("Book loan receipt can't be created because there are no books to borrow");
-                }
+                _orderService.Add(orderDTO);
+                return Created();
             }
-            return BadRequest("Add Failed");
+            else
+            {
+                return BadRequest("Book loan receipt can't be created because there are no books to borrow");
+            }
         }
 
         [HttpPut]
@@ -73,8 +113,16 @@ namespace BookWarehouse.Controllers
         {
             if (ModelState.IsValid)
             {
-                _orderService.Update(orderDTO);
-                return Ok("Update success");
+                var datas = GetById(orderDTO.Id);
+                if (datas == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _orderService.Update(orderDTO);
+                    return Ok("Update success");
+                }
             }
             return BadRequest("Update Failed");
         }
@@ -83,8 +131,23 @@ namespace BookWarehouse.Controllers
         [Route("/order/{id}")]
         public IActionResult Delete(int id)
         {
-            _orderService.Delete(id);
-            return Ok("Delete success");
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var checkExist = GetById(id);
+                if (checkExist == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    _orderService.Delete(id);
+                    return NoContent();
+                }
+            }
         }
     }
 }

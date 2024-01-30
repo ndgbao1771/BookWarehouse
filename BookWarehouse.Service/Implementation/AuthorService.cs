@@ -5,12 +5,13 @@ using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace BookWarehouse.Service.Implementation
 {
     public class AuthorService : IAuthorService
     {
+        #region Contructor
+
         private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
 
@@ -19,6 +20,11 @@ namespace BookWarehouse.Service.Implementation
             _authorRepository = authorRepository;
             _mapper = mapper;
         }
+
+        #endregion Contructor
+
+        #region Method
+
         public List<AuthorDTO> GetByFilter(AuthorFilter filter)
         {
             var query = _authorRepository.GetQueryable();
@@ -30,6 +36,7 @@ namespace BookWarehouse.Service.Implementation
         {
             return _mapper.Map<Author, AuthorDTO>(_authorRepository.FindById(id));
         }
+
         public AuthorDTO Add(AuthorDTO authorDTO)
         {
             _authorRepository.Add(_mapper.Map<AuthorDTO, Author>(authorDTO));
@@ -40,7 +47,7 @@ namespace BookWarehouse.Service.Implementation
         public void Delete(int id)
         {
             var result = GetById(id);
-            if(result == null)
+            if (result == null)
             {
                 return;
             }
@@ -64,5 +71,7 @@ namespace BookWarehouse.Service.Implementation
                 _authorRepository.Commit();
             }
         }
+
+        #endregion Method
     }
 }

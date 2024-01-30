@@ -14,6 +14,8 @@ namespace BookWarehouse.Service.Implementation
 {
     public class OrderService : IOrderService
     {
+        #region Contructor
+
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
         private readonly AppDbContext _context;
@@ -24,6 +26,10 @@ namespace BookWarehouse.Service.Implementation
             _mapper = mapper;
             _context = context;
         }
+
+        #endregion Contructor
+
+        #region Method
 
         public OrderAddDTO Add(OrderAddDTO orderDTO)
         {
@@ -84,6 +90,30 @@ namespace BookWarehouse.Service.Implementation
             return datas;
         }
 
+        public void Update(OrderUpdateDTO orderDTO)
+        {
+            var result = GetById(orderDTO.Id);
+            if (result == null)
+            {
+                return;
+            }
+            else
+            {
+                var exist = _orderRepository.FindById(orderDTO.Id, x => x.orderDetails);
+                if (exist != null)
+                {
+                    exist.Status = orderDTO.Status;
+                    exist.orderDetails.ForEach(x => x.DateGiveCurrent = orderDTO.DateGiveCurent);
+                    _orderRepository.Updated(exist);
+                    _orderRepository.Commit();
+                }
+            }
+        }
+
+        #endregion Method
+
+        #region Extension Method
+
         public void WriteCsvFile(List<StatisticsDTO> filtered)
         {
             if (filtered == null || !filtered.Any())
@@ -109,24 +139,6 @@ namespace BookWarehouse.Service.Implementation
             }
         }
 
-        public void Update(OrderUpdateDTO orderDTO)
-        {
-            var result = GetById(orderDTO.Id);
-            if (result == null)
-            {
-                return;
-            }
-            else
-            {
-                var exist = _orderRepository.FindById(orderDTO.Id, x => x.orderDetails);
-                if (exist != null)
-                {
-                    exist.Status = orderDTO.Status;
-                    exist.orderDetails.ForEach(x => x.DateGiveCurrent = orderDTO.DateGiveCurent);
-                    _orderRepository.Updated(exist);
-                    _orderRepository.Commit();
-                }
-            }
-        }
+        #endregion Extension Method
     }
 }

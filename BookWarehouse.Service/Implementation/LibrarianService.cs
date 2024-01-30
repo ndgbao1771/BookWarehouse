@@ -10,6 +10,8 @@ namespace BookWarehouse.Service.Implementation
 {
     public class LibrarianService : ILibrarianService
     {
+        #region Contructor
+
         private readonly ILibrarianRepository _librarianRepository;
         private readonly IMapper _mapper;
 
@@ -18,6 +20,10 @@ namespace BookWarehouse.Service.Implementation
             _librarianRepository = librarianRepository;
             _mapper = mapper;
         }
+
+        #endregion Contructor
+
+        #region Method
 
         public LibrarianDTO Add(LibrarianDTO librarianDTO)
         {
@@ -29,7 +35,7 @@ namespace BookWarehouse.Service.Implementation
         public void Delete(int id)
         {
             var result = GetById(id);
-            if(result == null)
+            if (result == null)
             {
                 return;
             }
@@ -55,7 +61,7 @@ namespace BookWarehouse.Service.Implementation
         public void Update(LibrarianDTO librarianDTO)
         {
             var result = GetById(librarianDTO.Id);
-            if(result == null)
+            if (result == null)
             {
                 return;
             }
@@ -65,5 +71,7 @@ namespace BookWarehouse.Service.Implementation
                 _librarianRepository.Commit();
             }
         }
+
+        #endregion Method
     }
 }

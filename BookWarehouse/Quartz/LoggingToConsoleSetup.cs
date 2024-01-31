@@ -3,22 +3,22 @@ using Quartz;
 
 namespace BookWarehouse.Quartz
 {
-    public class LoggingToConsolveSetup : IConfigureOptions<QuartzOptions>
+    public class LoggingToConsoleSetup : IConfigureOptions<QuartzOptions>
     {
         private readonly IConfiguration _configuration;
 
-        public LoggingToConsolveSetup(IConfiguration configuration)
+        public LoggingToConsoleSetup(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         public void Configure(QuartzOptions options)
         {
-            var jobkey = JobKey.Create(nameof(LoggingToConsolve));
+            var jobkey = JobKey.Create(nameof(LoggingToConsole));
 
             string cronExpression = _configuration.GetSection("Quartz:BookWarehouseJob").Value;
 
-            options.AddJob<LoggingToConsolve>(jobBuilder => jobBuilder.WithIdentity(jobkey))
+            options.AddJob<LoggingToConsole>(jobBuilder => jobBuilder.WithIdentity(jobkey))
                    .AddTrigger(trigger => trigger.ForJob(jobkey)
                                                  .WithCronSchedule(cronExpression)
                                                  /*.WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(5)

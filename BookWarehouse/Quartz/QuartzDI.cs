@@ -15,7 +15,7 @@ namespace BookWarehouse.Quartz
 
             services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-            services.ConfigureOptions<LoggingToConsolveSetup>();
+            services.ConfigureOptions<LoggingToConsoleSetup>();
         }
     }
 }

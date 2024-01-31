@@ -7,6 +7,9 @@ using BookWarehouse.Repository.Repositories.BookWarehouseRepositories;
 using BookWarehouse.Service.AutoMappers;
 using BookWarehouse.Service.Implementation;
 using BookWarehouse.Service.Interfaces;
+using BookWarehouse.Service.MassTransit;
+using BookWarehouse.Service.RabbitMQ;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using Serilog;
@@ -43,6 +46,9 @@ Log.Logger = new LoggerConfiguration()
 builder.Services.AddInfratructureQuartz();
 
 builder.Services.AddControllers();
+
+//RabbitMQ
+builder.Services.AddScoped<IRabbitMQBook, RabbitMQBook>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 builder.Services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));

@@ -1,6 +1,7 @@
 ﻿using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
+using BookWarehouse.Service.RabbitMQ;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookWarehouse.Controllers
@@ -11,11 +12,13 @@ namespace BookWarehouse.Controllers
     {
         private readonly IBookService _bookService;
         private readonly ILogger<BookController> _logger;
+        private readonly IRabbitMQBook _rabitMQBook;
 
-        public BookController(IBookService bookService, ILogger<BookController> logger)
+        public BookController(IBookService bookService, ILogger<BookController> logger, IRabbitMQBook rabbitMQBook)
         {
             _bookService = bookService;
             _logger = logger;
+            _rabitMQBook = rabbitMQBook;
         }
 
         [HttpGet]
@@ -44,6 +47,7 @@ namespace BookWarehouse.Controllers
             }
             else
             {
+                _rabitMQBook.SendBookMessage(datas);
                 return Ok();
             }
         }
@@ -76,6 +80,7 @@ namespace BookWarehouse.Controllers
                 if (ModelState.IsValid)
                 {
                     var datas = _bookService.Add(entity);
+                    _rabitMQBook.SendBookMessage(datas);
                     return Created();
                 }
                 return BadRequest(ModelState);

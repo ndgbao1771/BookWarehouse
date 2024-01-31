@@ -2,11 +2,11 @@
 
 namespace BookWarehouse.Quartz
 {
-    public class LoggingToConsolve : IJob
+    public class LoggingToConsole : IJob
     {
-        private readonly ILogger<LoggingToConsolve> _logger;
+        private readonly ILogger<LoggingToConsole> _logger;
 
-        public LoggingToConsolve(ILogger<LoggingToConsolve> logger)
+        public LoggingToConsole(ILogger<LoggingToConsole> logger)
         {
             _logger = logger;
         }

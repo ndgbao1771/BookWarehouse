@@ -13,8 +13,16 @@
 
         public async Task InvokeAsync(HttpContext context)
         {
-            context.Request.PathBase = new PathString(_routePrefix);
-            await _next(context);
+            try
+            {
+				context.Request.PathBase = new PathString(_routePrefix);
+				await _next(context);
+			}
+            catch (Exception ex)
+            {
+                var a = ex.ToString();
+            }
+
         }
     }
 }

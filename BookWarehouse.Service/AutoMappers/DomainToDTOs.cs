@@ -10,6 +10,7 @@ namespace BookWarehouse.Service.AutoMappers
     {
         public DomainToDTOs()
         {
+            CreateMap<AppUser, AppUserDTO>();
             CreateMap<Book, BookDTO>().ForMember(dest => dest.Seri, opt => opt.MapFrom(src => src.bookDetails != null
                                                                      && src.bookDetails.Any() ? src.bookDetails.First().Seri : null))
                                       .ForMember(dest => dest.Author, opt => opt.MapFrom(x => x.author.Name))

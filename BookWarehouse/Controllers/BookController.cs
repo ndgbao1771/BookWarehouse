@@ -8,7 +8,7 @@ namespace BookWarehouse.Controllers
 {
     [ApiController]
     [Route("book")]
-    public class BookController : Controller
+    public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
         private readonly ILogger<BookController> _logger;

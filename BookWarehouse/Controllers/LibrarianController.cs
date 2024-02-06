@@ -7,7 +7,7 @@ namespace BookWarehouse.Controllers
 {
     [ApiController]
     [Route("/libratians")]
-    public class LibrarianController : Controller
+    public class LibrarianController : ControllerBase
     {
         private readonly ILibrarianService _librarianService;
         private readonly ILogger<LibrarianController> _logger;

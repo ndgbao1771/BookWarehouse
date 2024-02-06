@@ -6,7 +6,7 @@ namespace BookWarehouse.Controllers
 {
     [ApiController]
     [Route("bookcategory")]
-    public class BookCategoryController : Controller
+    public class BookCategoryController : ControllerBase
     {
         private readonly IBookCategoryService _bookCategoryService;
         private readonly ILogger<BookCategoryController> _logger;

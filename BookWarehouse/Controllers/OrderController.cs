@@ -7,7 +7,7 @@ namespace BookWarehouse.Controllers
 {
     [ApiController]
     [Route("/order")]
-    public class OrderController : Controller
+    public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
         private readonly ILogger<OrderController> _logger;

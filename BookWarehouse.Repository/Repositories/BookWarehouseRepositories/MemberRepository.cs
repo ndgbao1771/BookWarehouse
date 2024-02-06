@@ -6,7 +6,7 @@ using BookWarehouse.Repository.Repositories.Shared;
 
 namespace BookWarehouse.Repository.Repositories.BookWarehouseRepositories
 {
-    public class MemberRepository : Repository<Member, int>, IMemberRepository
+	public class MemberRepository : Repository<Member, int>, IMemberRepository
     {
         private readonly AppDbContext _context;
 

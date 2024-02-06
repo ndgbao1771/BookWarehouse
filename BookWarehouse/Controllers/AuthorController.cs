@@ -8,7 +8,7 @@ namespace BookWarehouse.Controllers
 {
 	[ApiController]
 	[Route("authors")]
-	public class AuthorController : Controller
+	public class AuthorController : ControllerBase
 	{
 		private readonly IAuthorService _authorService;
 		private readonly ILogger<AuthorController> _logger;
@@ -20,7 +20,7 @@ namespace BookWarehouse.Controllers
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
+		[Authorize]
 		[Route("")]
 		public IActionResult GetByFilter([FromQuery] AuthorFilter filter)
 		{

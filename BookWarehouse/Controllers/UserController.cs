@@ -1,4 +1,5 @@
-﻿using BookWarehouse.DTO;
+﻿using Azure.Core;
+using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.Models;
 using BookWarehouse.Service.EntityDTOs;
@@ -41,13 +42,11 @@ namespace BookWarehouse.Controllers
 				return Ok(new { Token = token });
 
 			}
-			else
-			{
-				return BadRequest("Invalid login attempt.");
-			}
+			return BadRequest("Invalid login attempt.");
+			
 		}
 
-		private string GeneratorToken(AppUser appUser)
+		private Token GeneratorToken(AppUser appUser)
 		{
 			try
 			{
@@ -59,23 +58,144 @@ namespace BookWarehouse.Controllers
 					{
 					new Claim(ClaimTypes.Name, appUser.UserName),
 					new Claim(ClaimTypes.Email, appUser.Email),
+					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
 					//roles
-					new Claim("TokenId", Guid.NewGuid().ToString())
 				}),
 					Expires = DateTime.UtcNow.AddMinutes(1),
 					SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256)
 				};
 
 				var token = jwtToken.CreateToken(tokenDescription);
+				var accesToken = jwtToken.WriteToken(token);
+				var refreshToken = GenerateRefreshToken();
 
-				return jwtToken.WriteToken(token);
+				var refreshTokenEntity = new RefreshToken
+				{
+					Id = Guid.NewGuid(),
+					JwtId = token.Id,
+					UserId = appUser.Id,
+					Token = refreshToken,
+					IsUsed = false,
+					IsRevoked = false,
+					IssuedAt = DateTime.UtcNow,
+					ExpiredAt = DateTime.UtcNow.AddHours(1)
+				};
+
+				_context.Add(refreshTokenEntity);
+				_context.SaveChanges();
+
+				return new Token
+				{
+					AccessToken = accesToken,
+					RefreshToken = refreshToken
+				};
 			}
 			catch (Exception ex)
 			{
-				return ex.ToString();
+				return new Token
+				{
+					
+				}; ;
 			}
-			
+		}
+
+		[HttpPost]
+		[Route("renewToken")]
+		public IActionResult RenewToken(Token token)
+		{
+			var jwtToken = new JwtSecurityTokenHandler();
+			var secretKeyBytes = Encoding.UTF8.GetBytes(_key.SecretKey);
+			var param = new TokenValidationParameters
+			{
+				//auto provide token
+				ValidateIssuer = false,
+				ValidateAudience = false,
+
+				//register in token
+				ValidateIssuerSigningKey = true,
+				IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+
+				ClockSkew = TimeSpan.Zero,
+				ValidateLifetime = false
+			};
+
+			try
+			{
+				var tokenVerification = jwtToken.ValidateToken(token.AccessToken, param, out var validateToken);
+
+				if(validateToken is JwtSecurityToken jwtSecurityToken)
+				{
+					var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
+					if (!result)
+					{
+						return BadRequest("alg false!");
+					}
+				}
+
+				var utcExpireDate = long.Parse(tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+				var expireDate = ConvertUnixTimeToDateTime(utcExpireDate);
+				if(expireDate > DateTime.UtcNow)
+				{
+					return BadRequest("Access token has not yet expired");
+				}
+
+				var storedToken = _context.refreshTokens.FirstOrDefault(x => x.Token == token.RefreshToken);
+				if(storedToken == null)
+				{
+					return BadRequest("Refresh token does not exist");
+				}
+
+				if (storedToken.IsUsed)
+				{
+					return BadRequest("Refresh token has been used");
+				}
+				if (storedToken.IsRevoked)
+				{
+					return BadRequest("Refresh token has been revoked");
+				}
+
+				var jwtId = tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+				if (storedToken.JwtId != jwtId)
+				{
+					return BadRequest("Token not match!");
+				}
+
+				//update token
+				storedToken.IsRevoked = true;
+				storedToken.IsUsed = true;
+				_context.Update(storedToken);
+				_context.SaveChanges();
+
+				//create new token
+				var user = _context.appUsers.SingleOrDefault(x => x.Id == storedToken.UserId);
+				var newToken = GeneratorToken(user);
+
+				return Ok("renew token success");
+			}
+			catch (Exception ex)
+			{
+				return BadRequest();
+			}
+
+		}
+
+		private string GenerateRefreshToken()
+		{
+			var random = new byte[32];
+			using (var rng = RandomNumberGenerator.Create())
+			{
+				rng.GetBytes(random);
+				return Convert.ToBase64String(random);
+			}
+		}
+
+		private DateTime ConvertUnixTimeToDateTime(long utcExpireDate)
+		{
+			var dateTimeInterval = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			dateTimeInterval.AddSeconds(utcExpireDate).ToUniversalTime();
+
+			return dateTimeInterval;
 		}
 
 	}

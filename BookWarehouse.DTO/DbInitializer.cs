@@ -1,14 +1,5 @@
 ﻿using BookWarehouse.DTO.Entities;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookWarehouse.DTO
 {
@@ -17,6 +8,7 @@ namespace BookWarehouse.DTO
 		private readonly AppDbContext _context;
 		private UserManager<AppUser> _userManager;
 		private RoleManager<AppRole> _roleManager;
+
 		public DbInitializer(AppDbContext context, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
 		{
 			_context = context;

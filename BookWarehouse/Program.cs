@@ -2,7 +2,6 @@
 using BookWarehouse.DTO;
 using BookWarehouse.DTO.Entities;
 using BookWarehouse.Extensions;
-using BookWarehouse.Models;
 using BookWarehouse.Quartz;
 using BookWarehouse.Repository.Interfaces.IBookWarehouseRepositories;
 using BookWarehouse.Repository.Repositories.BookWarehouseRepositories;
@@ -52,15 +51,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.SignIn.RequireConfirmedPhoneNumber = false;
 });
 
-// Config Cookie
-builder.Services.ConfigureApplicationCookie(options =>
-{
-	// options.Cookie.HttpOnly = true;
-	options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-	options.LoginPath = $"/login/";
-	options.LogoutPath = $"/logout/";
-	options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
-});
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 {
 	options.ValidationInterval = TimeSpan.FromSeconds(5);
@@ -113,28 +103,40 @@ builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<ILibrarianRepository, LibrarianRepository>();
 
 builder.Services.AddScoped<DbInitializer>();
+
 #region JWT
-builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwts"));
-var secretKey = builder.Configuration["Jwts:SecretKey"];
-var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+
+/*builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwts"));*/
+
 #endregion JWT
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-				.AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
-				{
-					//auto provide token
-					ValidateIssuer = false,
-					ValidateAudience = false,
-
-					//register in token
-					ValidateIssuerSigningKey = true,
-					IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
-
-					ClockSkew = TimeSpan.Zero
-				});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+	options.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuer = false,
+		ValidateAudience = false,
+		ValidateLifetime = true,
+		ValidateIssuerSigningKey = true,
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwts:SecretKey"]))
+	};
+});
+
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("AdminPolicy", policy =>
+		policy.RequireRole("Admin"));
+	options.AddPolicy("MemberPolicy", policy =>
+		policy.RequireRole("Member"));
+});
 
 var app = builder.Build();
 

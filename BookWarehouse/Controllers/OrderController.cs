@@ -1,6 +1,7 @@
 ﻿using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookWarehouse.Controllers
@@ -93,7 +94,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPost]
-        [Route("")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("")]
         public IActionResult CreatedBookLoanReceipt(OrderAddDTO orderDTO)
         {
             if (ModelState.IsValid)
@@ -108,7 +110,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
-        [Route("/order")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("/order")]
         public IActionResult BookReturnReceipt(OrderUpdateDTO orderDTO)
         {
             if (ModelState.IsValid)
@@ -128,7 +131,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
-        [Route("/order/{id}")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("/order/{id}")]
         public IActionResult Delete(int id)
         {
             if (id == 0)

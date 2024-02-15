@@ -20,7 +20,7 @@ namespace BookWarehouse.Controllers
 		}
 
 		[HttpGet]
-		[Authorize]
+		[Authorize(Policy = "MemberPolicy")]
 		[Route("")]
 		public IActionResult GetByFilter([FromQuery] AuthorFilter filter)
 		{
@@ -58,7 +58,7 @@ namespace BookWarehouse.Controllers
 		}
 
 		[HttpPost]
-		[Authorize]
+		[Authorize(Policy = "AdminPolicy")]
 		[Route("")]
 		public IActionResult AddEntity([FromQuery] AuthorDTO authorDTO)
 		{
@@ -74,7 +74,7 @@ namespace BookWarehouse.Controllers
 		}
 
 		[HttpPut]
-		[Authorize]
+		[Authorize(Policy = "AdminPolicy")]
 		[Route("")]
 		public IActionResult UpdateEntity(AuthorDTO authorDTO)
 		{
@@ -87,7 +87,7 @@ namespace BookWarehouse.Controllers
 		}
 
 		[HttpDelete]
-		[Authorize]
+		[Authorize(Policy = "AdminPolicy")]
 		[Route("{id}")]
 		public IActionResult Delete(int id)
 		{

@@ -1,6 +1,7 @@
 ﻿using BookWarehouse.Service.EntityDTOs;
 using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookWarehouse.Controllers
@@ -49,7 +50,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPost]
-        [Route("")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("")]
         public IActionResult AddEntity([FromQuery] LibrarianDTO librarianDTO)
         {
             if (ModelState.IsValid)
@@ -61,7 +63,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
-        [Route("")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("")]
         public IActionResult UpdateEntity(LibrarianDTO librarianDTO)
         {
             if (ModelState.IsValid)
@@ -73,7 +76,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("{id}")]
         public IActionResult Delete(int id)
         {
             if (id == 0)

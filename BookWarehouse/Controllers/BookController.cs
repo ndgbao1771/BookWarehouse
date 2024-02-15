@@ -2,6 +2,7 @@
 using BookWarehouse.Service.Filters;
 using BookWarehouse.Service.Interfaces;
 using BookWarehouse.Service.RabbitMQ;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookWarehouse.Controllers
@@ -68,7 +69,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPost]
-        [Route("")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("")]
         public IActionResult AddEntity([FromQuery]BookUpdateDTO entity)
         {
             if (entity == null)
@@ -88,7 +90,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpPut]
-        [Route("")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("")]
         public IActionResult UpdateEntity(BookUpdateDTO bookUpdateDTO)
         {
             if (bookUpdateDTO == null)
@@ -107,7 +110,8 @@ namespace BookWarehouse.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+		[Authorize(Policy = "AdminPolicy")]
+		[Route("{id}")]
         public IActionResult Delete(int id)
         {
             if(id == 0)

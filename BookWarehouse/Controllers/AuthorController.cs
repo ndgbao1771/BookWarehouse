@@ -20,7 +20,7 @@ namespace BookWarehouse.Controllers
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "Member")]
+		[Authorize(Policy = "MemberPolicy")]
 		[Route("")]
 		public IActionResult GetByFilter([FromQuery] AuthorFilter filter)
 		{
